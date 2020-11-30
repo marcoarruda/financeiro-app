@@ -1,1 +1,10 @@
-{}
+{
+  "auth": {
+    "financeiroapp334220be": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

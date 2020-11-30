@@ -10,6 +10,11 @@
       "StackName": "amplify-financeiroapp-dev-134236",
       "StackId": "arn:aws:cloudformation:us-east-1:376873334031:stack/amplify-financeiroapp-dev-134236/72facd80-3333-11eb-843a-0a675f4c6539",
       "AmplifyAppId": "d1jjn38ay961ja"
+    },
+    "categories": {
+      "auth": {
+        "financeiroapp334220be": {}
+      }
     }
   }
 }
