@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { colors } from '@material-ui/core';
@@ -16,6 +14,7 @@ const useStyles = makeStyles({
     bottom: 0,
     backgroundColor: colors.indigo[800],
     color: colors.common.white,
+    zIndex: 100,
   },
   navigationAction: {
     color: colors.grey[50],

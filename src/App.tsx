@@ -2,6 +2,7 @@ import React from 'react';
 
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Data from './components/Data'
 
 import {
   BrowserRouter as Router,
@@ -12,6 +13,7 @@ import {
 import Grid from '@material-ui/core/Grid'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import AppProvider from './contexts/AppContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,29 +32,32 @@ const App: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Router>
-        {/* Header */}
-        <Header />
+      <AppProvider>
+        <Router>
+          {/* Header */}
+          <Header />
 
-        {/* Container */}
-        <Grid container className={classes.container}>
-          <Switch>
-            <Route path="/about">
-              <h1>About</h1>
-            </Route>
-            <Route path="/users">
-              <h1>Users</h1>
-              { rows }
-            </Route>
-            <Route path="/">
-              <h1>Home</h1>
-            </Route>
-          </Switch>
-        </Grid>
+          {/* Container */}
+          <Grid container className={classes.container}>
+            <Data />
+            <Switch>
+              <Route path="/about">
+                <h1>About</h1>
+              </Route>
+              <Route path="/users">
+                <h1>Users</h1>
+                { rows }
+              </Route>
+              <Route path="/">
+                <h1>Home</h1>
+              </Route>
+            </Switch>
+          </Grid>
 
-        {/* Footer */}
-        <Footer />
-      </Router>
+          {/* Footer */}
+          <Footer />
+        </Router>
+      </AppProvider>
     </React.Fragment>
   );
 }
