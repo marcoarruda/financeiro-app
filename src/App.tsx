@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import AppProvider from './contexts/AppContext';
+import Login from './pages/Login';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,6 +49,7 @@ const App: React.FC = () => {
                 <h1>Users</h1>
                 { rows }
               </Route>
+              <Route exact path="/login" component={Login} />
               <Route path="/">
                 <h1>Home</h1>
               </Route>

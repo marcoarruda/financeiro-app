@@ -6,10 +6,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import RestoreIcon from '@material-ui/icons/Restore';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const useStyles = makeStyles({
   list: {
@@ -56,7 +57,7 @@ function TemporaryDrawer() {
       <List>
         {['Resumo', 'Gráficos', 'Lista'].map((text, index) => (
           <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemIcon>{index === 2 ? <AssignmentIcon /> : index === 0 ? <RestoreIcon /> : <AssessmentIcon />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}

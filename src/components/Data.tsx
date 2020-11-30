@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid'
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
     textField: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
-      minWidth: 140
+      minWidth: 180
     },
     container: {
       marginTop: '0.6rem',
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function DatePickers() {
+const Data: FC = () => {
   const classes = useStyles();
 
   const today = (new Date()).toISOString().split('T')[0]
@@ -42,13 +42,10 @@ export default function DatePickers() {
         <form className={classes.form} noValidate>
         <TextField
           id="date"
-          label="Período"
+          label="Data"
           type="date"
           defaultValue={ today }
           className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
       </form>
 
@@ -62,3 +59,5 @@ export default function DatePickers() {
     </Grid>
   );
 }
+
+export default Data

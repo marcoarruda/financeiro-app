@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Drawer from './Drawer';
 import { AppContext } from '../contexts/AppContext';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,9 +39,9 @@ const Header: React.FC = () => {
             <MenuIcon />
           </IconButton> */}
           <Typography variant="h6" className={classes.title}>
-            { context?.user }
+            { context?.user } 
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button to="/login" component={Link}  color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     </div>
