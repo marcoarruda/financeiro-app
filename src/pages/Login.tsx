@@ -1,15 +1,9 @@
-import { Container, Paper } from "@material-ui/core";
-import { FC, useState } from "react";
+import { FC } from "react";
+import LoginContainer from '../components/Auth/LoginContainer'
 
 const Login: FC = () => {
-  const [cadastro, setCadastro] = useState<boolean>(false)
-
   return (
-    <Container component="main">
-      <Paper elevation={3}>
-        <h1>Login</h1>
-      </Paper>
-    </Container>
+    <LoginContainer />
   )
 }
 
