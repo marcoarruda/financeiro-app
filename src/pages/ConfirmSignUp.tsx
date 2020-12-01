@@ -1,12 +1,8 @@
-import { FC, useContext, useState } from 'react'
+import { FC, useState } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Link from '@material-ui/core/Link'
-import Grid from '@material-ui/core/Grid'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
@@ -18,7 +14,6 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 import { Auth } from 'aws-amplify'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { AppContext } from '../contexts/AppContext'
 
 function Alert (props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -45,14 +40,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 type FormData = {
-  phonenumber: string,
-  password: string
+  codigo: string
+  telefone: string
 }
 
-const Login: FC = () => {
+const ConfirmSignUp: FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const context = useContext(AppContext)
 
   const { register, handleSubmit } = useForm<FormData>({
     mode: 'onChange',
@@ -61,18 +55,14 @@ const Login: FC = () => {
 
   const history = useHistory()
 
-  const onSubmit = (data: FormData) => {
-    const { phonenumber, password } = data
+  const onSubmit = async (data: FormData) => {
+    const { codigo, telefone } = data
 
     setLoading(true)
 
-    Auth.signIn(phonenumber, password)
+    Auth.confirmSignUp(telefone, codigo)
       .then(user => {
-        localStorage.setItem('teste.login', user.signInUserSession.accessToken.jwtToken)
-
-        context?.setUser(user)
-
-        history.push('/')
+        history.push('/login')
       })
       .catch(err => {
         setError(err.message)
@@ -93,7 +83,7 @@ const Login: FC = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login
+          Confirmar
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
           <TextField
@@ -101,11 +91,9 @@ const Login: FC = () => {
             margin="normal"
             required
             fullWidth
-            id="phonenumber"
-            label="Número de Telefone"
-            name="phonenumber"
-            autoComplete="phonenumber"
-            autoFocus
+            name="telefone"
+            label="Telefone"
+            id="telefone"
             inputRef={register({
               required: true
             })}
@@ -115,11 +103,9 @@ const Login: FC = () => {
             margin="normal"
             required
             fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
+            name="codigo"
+            label="Código"
+            id="codigo"
             inputRef={register({
               required: true
             })}
@@ -132,20 +118,8 @@ const Login: FC = () => {
             className={classes.submit}
             disabled={loading}
           >
-            Entrar
+            Confirmar
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/recover-password" variant="body2">
-                Esqueceu sua senha?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                {'Não possui uma conta?'}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Snackbar open={!!error} autoHideDuration={3000}>
@@ -157,4 +131,4 @@ const Login: FC = () => {
   )
 }
 
-export default Login
+export default ConfirmSignUp

@@ -1,9 +1,9 @@
-import { FC } from "react"
+import { FC } from 'react'
 
-const AuthLayout: FC = ({ children }) => {
+const AuthLayout: FC = (props) => {
   return (
     <div>
-      { children }
+      { props.children }
     </div>
   )
 }

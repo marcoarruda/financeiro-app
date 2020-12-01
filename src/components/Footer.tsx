@@ -1,11 +1,12 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
-import AssessmentIcon from '@material-ui/icons/Assessment';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import { colors } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles'
+import BottomNavigation from '@material-ui/core/BottomNavigation'
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
+import RestoreIcon from '@material-ui/icons/Restore'
+import AssessmentIcon from '@material-ui/icons/Assessment'
+import AssignmentIcon from '@material-ui/icons/Assignment'
+import { colors } from '@material-ui/core'
+import { FC, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
   navigation: {
@@ -14,34 +15,34 @@ const useStyles = makeStyles({
     bottom: 0,
     backgroundColor: colors.indigo[800],
     color: colors.common.white,
-    zIndex: 100,
+    zIndex: 100
   },
   navigationAction: {
-    color: colors.grey[50],
+    color: colors.grey[50]
   },
   navigationActionSelected: {
-    color: colors.common.white,
+    color: colors.common.white
   }
-});
+})
 
-const SimpleBottomNavigation: React.FC = () => {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+const SimpleBottomNavigation: FC = () => {
+  const classes = useStyles()
+  const [value, setValue] = useState(0)
 
   return (
     <BottomNavigation
       value={value}
       onChange={(event, newValue) => {
-        setValue(newValue);
+        setValue(newValue)
       }}
       showLabels
       className={classes.navigation}
     >
-      <BottomNavigationAction className={classes.navigationAction} label="Resumo" icon={<RestoreIcon />} />
-      <BottomNavigationAction className={classes.navigationAction} label="Gráfico" icon={<AssessmentIcon />} />
-      <BottomNavigationAction className={classes.navigationAction} label="Lista" icon={<AssignmentIcon />} />
+      <BottomNavigationAction component={Link} to="/" className={classes.navigationAction} label="Resumo" icon={<RestoreIcon />} />
+      <BottomNavigationAction component={Link} to="/grafico" className={classes.navigationAction} label="Gráfico" icon={<AssessmentIcon />} />
+      <BottomNavigationAction component={Link} to="/lista" className={classes.navigationAction} label="Lista" icon={<AssignmentIcon />} />
     </BottomNavigation>
-  );
+  )
 }
 
 export default SimpleBottomNavigation

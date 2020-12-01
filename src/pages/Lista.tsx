@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState } from 'react'
 
 const Lista: FC = () => {
   const [lista, setLista] = useState<boolean>(false)

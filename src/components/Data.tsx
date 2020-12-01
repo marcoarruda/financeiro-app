@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { FC } from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowRight from '@material-ui/icons/ArrowRight'
@@ -9,7 +9,7 @@ import ArrowLeft from '@material-ui/icons/ArrowLeft'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     form: {
-      display: 'inline',
+      display: 'inline'
     },
     textField: {
       marginLeft: theme.spacing(1),
@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: '0.6rem',
       zIndex: 0
     }
-  }),
-);
+  })
+)
 
 const Data: FC = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const today = (new Date()).toISOString().split('T')[0]
 
@@ -57,7 +57,7 @@ const Data: FC = () => {
         </IconButton>
       </Grid>
     </Grid>
-  );
+  )
 }
 
 export default Data
