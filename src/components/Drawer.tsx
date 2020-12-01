@@ -12,6 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import RestoreIcon from '@material-ui/icons/Restore'
 import AssessmentIcon from '@material-ui/icons/Assessment'
 import AssignmentIcon from '@material-ui/icons/Assignment'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
   list: {
@@ -57,7 +58,7 @@ function TemporaryDrawer () {
     >
       <List>
         {['Resumo', 'Gráficos', 'Lista'].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={text} component={Link} to={index === 0 ? '/' : index === 1 ? '/grafico' : '/lista' }>
             <ListItemIcon>{index === 2 ? <AssignmentIcon /> : index === 0 ? <RestoreIcon /> : <AssessmentIcon />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
