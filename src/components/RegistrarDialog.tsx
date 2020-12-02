@@ -38,6 +38,7 @@ function RegistrarDialog (props: SimpleDialogProps) {
     }
 
     context?.addRegistro(registro)
+    onClose()
   }
 
   return (

@@ -6,6 +6,7 @@ type AppContextType = {
   setUser: (user: any) => void
   registros: Registro[]
   addRegistro: (registro: { tipo: 'entrada' | 'saida', descricao: string, valor: number }) => void
+  removeRegistro: (registro: {id: number, tipo: 'entrada' | 'saida', descricao: string, valor: number }) => void
   isAuthenticated: () => boolean
   setData: (data: Date) => void
 }
@@ -52,6 +53,11 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
     setRegistros([...registros, novoRegistro])
   }
+  const removeRegistro = (registro: {id: number, tipo: 'entrada' | 'saida', descricao: string, valor: number }) => {
+    const reg = registros.filter(e => e.id !== registro.id)
+
+    setRegistros(reg)
+  }
 
   const isAuthenticated = () => {
     if (user) {
@@ -61,7 +67,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  return <AppContext.Provider value={{ isAuthenticated, user, setUser, registros, addRegistro, setData }}>
+  return <AppContext.Provider value={{ isAuthenticated, user, setUser, registros, addRegistro, removeRegistro, setData }}>
     { children }
   </AppContext.Provider>
 }
