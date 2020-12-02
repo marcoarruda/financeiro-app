@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useContext } from 'react'
+import { ChangeEvent, FC, useContext, useEffect } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
@@ -7,6 +7,7 @@ import ArrowRight from '@material-ui/icons/ArrowRight'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
 import { AppContext } from '../contexts/AppContext'
 import { useForm } from 'react-hook-form'
+import moment from 'moment'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,7 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     container: {
       marginTop: '0.6rem',
-      zIndex: 0
+      zIndex: 0,
+      paddingBottom: '0.6rem',
+      borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
     }
   })
 )
@@ -30,13 +33,19 @@ const Data: FC = () => {
   const context = useContext(AppContext)
   const { register, getValues } = useForm()
 
-  const today = (new Date()).toISOString().split('T')[0]
+  const diminuiData = () => {
+    context?.setData(moment(context?.data).subtract(1, 'days').toDate())
+  }
+
+  const aumentaData = () => {
+    context?.setData(moment(context?.data).add(1, 'days').toDate())
+  }
 
   return (
     <Grid item container xs={12} sm={12} md={12} className={classes.container} alignItems='center' alignContent='center' justify='center'>
       {/* Arrow Previous */}
       <Grid item container xs={2} sm={2} md={2} justify='center'>
-        <IconButton>
+        <IconButton onClick={diminuiData}>
           <ArrowLeft/>
         </IconButton>
       </Grid>
@@ -49,16 +58,10 @@ const Data: FC = () => {
           label="Data"
           type="date"
           name="data"
-          defaultValue={ today }
+          value={moment(context?.data).format('YYYY-MM-DD')}
           inputRef={register}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            console.log(getValues().data)
-            const data = getValues().data
-            const dataArray = data.split('-')
-            const newDate = new Date(dataArray[0], dataArray[1] - 1, dataArray[2])
-            newDate.setTime(newDate.getTime() + newDate.getTimezoneOffset() * 60 * 1000)
-
-            context?.setData(newDate)
+          onChange={() => {
+            context?.setData(moment(getValues().data).toDate())
           }}
           className={classes.textField}
         />
@@ -67,7 +70,7 @@ const Data: FC = () => {
       {/* Arrow Next */}
       </Grid>
       <Grid item container xs={2} sm={2} md={2} justify='center'>
-        <IconButton>
+        <IconButton onClick={aumentaData}>
           <ArrowRight />
         </IconButton>
       </Grid>
