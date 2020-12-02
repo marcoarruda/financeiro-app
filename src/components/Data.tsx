@@ -1,10 +1,12 @@
-import { FC } from 'react'
+import { ChangeEvent, FC, useContext } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import ArrowLeft from '@material-ui/icons/ArrowLeft'
+import { AppContext } from '../contexts/AppContext'
+import { useForm } from 'react-hook-form'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,6 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Data: FC = () => {
   const classes = useStyles()
+  const context = useContext(AppContext)
+  const { register, getValues } = useForm()
 
   const today = (new Date()).toISOString().split('T')[0]
 
@@ -44,7 +48,18 @@ const Data: FC = () => {
           id="date"
           label="Data"
           type="date"
+          name="data"
           defaultValue={ today }
+          inputRef={register}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            console.log(getValues().data)
+            const data = getValues().data
+            const dataArray = data.split('-')
+            const newDate = new Date(dataArray[0], dataArray[1] - 1, dataArray[2])
+            newDate.setTime(newDate.getTime() + newDate.getTimezoneOffset() * 60 * 1000)
+
+            context?.setData(newDate)
+          }}
           className={classes.textField}
         />
       </form>

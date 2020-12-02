@@ -107,7 +107,7 @@ const SignUp: FC = () => {
                 required
                 fullWidth
                 id="firstName"
-                label="First Name"
+                label="Primeiro Nome"
                 autoFocus
                 inputRef={register({
                   required: true
@@ -120,7 +120,7 @@ const SignUp: FC = () => {
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                label="Último Nome"
                 name="lastName"
                 autoComplete="lname"
                 inputRef={register({
@@ -134,7 +134,7 @@ const SignUp: FC = () => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Email"
                 name="email"
                 autoComplete="email"
                 inputRef={register({
@@ -162,7 +162,7 @@ const SignUp: FC = () => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Senha"
                 type="password"
                 id="password"
                 autoComplete="current-password"

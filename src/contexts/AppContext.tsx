@@ -4,16 +4,26 @@ import { useState, createContext, ReactNode, useEffect } from 'react'
 type AppContextType = {
   user: any
   setUser: (user: any) => void
-  registros: any[]
-  setRegistros: (registros: any[]) => void
+  registros: Registro[]
+  addRegistro: (registro: { tipo: 'entrada' | 'saida', descricao: string, valor: number }) => void
   isAuthenticated: () => boolean
+  setData: (data: Date) => void
+}
+
+type Registro = {
+  id: number
+  tipo: 'entrada' | 'saida'
+  descricao: string
+  valor: number
+  data: Date
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined)
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null)
-  const [registros, setRegistros] = useState<any[]>([])
+  const [registros, setRegistros] = useState<Registro[]>([])
+  const [data, setData] = useState<Date>(new Date())
 
   useEffect(() => {
     (async () => {
@@ -27,6 +37,22 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     })()
   }, [])
 
+  useEffect(() => {
+    console.log(registros)
+  }, [registros])
+
+  const addRegistro = (registro: { tipo: 'entrada' | 'saida', descricao: string, valor: number }) => {
+    const novoRegistro = {
+      id: registros.length + 1,
+      tipo: registro.tipo,
+      descricao: registro.descricao,
+      valor: registro.valor,
+      data
+    }
+
+    setRegistros([...registros, novoRegistro])
+  }
+
   const isAuthenticated = () => {
     if (user) {
       return true
@@ -35,7 +61,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  return <AppContext.Provider value={{ isAuthenticated, user, setUser, registros, setRegistros }}>
+  return <AppContext.Provider value={{ isAuthenticated, user, setUser, registros, addRegistro, setData }}>
     { children }
   </AppContext.Provider>
 }

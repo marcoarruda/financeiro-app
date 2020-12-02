@@ -1,6 +1,7 @@
-import { Button, Container, createStyles, Grid, makeStyles, Typography, Theme, withStyles } from '@material-ui/core'
+import { Button, Container, Grid, Typography, withStyles } from '@material-ui/core'
 import { common, green, red } from '@material-ui/core/colors'
-import { FC } from 'react'
+import { FC, useState } from 'react'
+import RegistrarDialog from '../components/RegistrarDialog'
 
 const InButton = withStyles({
   root: {
@@ -29,6 +30,18 @@ const OutButton = withStyles({
 })(Button)
 
 const Resumo: FC = () => {
+  const [registrarDialogOpen, setRegistrarDialogOpen] = useState(false)
+  const [tipoRegistro, setTipoRegistro] = useState<'entrada' | 'saida'>('entrada')
+
+  const handleClose = () => {
+    setRegistrarDialogOpen(false)
+  }
+
+  const handleOpenRegistroDialog = (tipo: 'entrada' | 'saida') => {
+    setTipoRegistro(tipo)
+    setRegistrarDialogOpen(true)
+  }
+
   return (
   <Container style={{ marginTop: '20px' }}>
     <Grid justify="center" alignItems="center" item container direction="column">
@@ -36,15 +49,16 @@ const Resumo: FC = () => {
         <Typography variant="h6">Entrada: R$ 500,00</Typography>
       </Grid>
       <Grid justify="center" container item md={4}>
-        <InButton>Registrar entrada</InButton>
+        <InButton onClick={() => { handleOpenRegistroDialog('entrada') }}>Registrar entrada</InButton>
       </Grid>
       <Grid style={{ paddingTop: '20px' }} justify="center" container item md={2}>
         <Typography variant="h6">Saida: R$ 250,00</Typography>
       </Grid>
       <Grid justify="center" container item md={4}>
-        <OutButton>Registrar saída</OutButton>
+        <OutButton onClick={() => { handleOpenRegistroDialog('saida') }}>Registrar saída</OutButton>
       </Grid>
     </Grid>
+    <RegistrarDialog open={registrarDialogOpen} onClose={handleClose} tipoRegistro={tipoRegistro} />
   </Container>
   )
 }
