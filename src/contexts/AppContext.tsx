@@ -113,7 +113,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         return accumulator
       }
     }, 0)
-  }, [registros, data])
+  }, [registros, data, tipoData])
 
   const valorSaida = useMemo(() => {
     return registros.reduce((accumulator, registro) => {
@@ -126,7 +126,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         return accumulator
       }
     }, 0)
-  }, [registros, data])
+  }, [registros, data, tipoData])
 
   const addRegistro = async (registro: {
     tipo: 'entrada' | 'saida'
