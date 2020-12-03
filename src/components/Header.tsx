@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       zIndex: 100
     },
+    appBar: {
+      'background-image': 'radial-gradient( circle farthest-corner at 10% 20%,  rgba(69,86,102,1) 0%, rgba(34,34,34,1) 90% )'
+    },
     menuButton: {
       marginRight: theme.spacing(2)
     },
@@ -43,14 +46,14 @@ const Header: FC = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar className={classes.appBar} position="static">
         <Toolbar>
           <Drawer />
           {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton> */}
           <Typography variant="subtitle1" className={classes.title}>
-            { context?.user ? context?.user.attributes.name.split(' ')[0] : 'Bem vindo' }
+            Bem vindo { context?.user ? context?.user.attributes.name.split(' ')[0] : 'Bem vindo' }
           </Typography>
           { context?.user
             ? <Button onClick={() => { onLogout() }} color="inherit">Sair</Button>

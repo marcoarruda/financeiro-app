@@ -1,5 +1,5 @@
 import { API, graphqlOperation } from 'aws-amplify'
-import moment from 'moment'
+import moment, { unitOfTime } from 'moment'
 import { useState, createContext, ReactNode, useMemo } from 'react'
 
 import { createRegistro, deleteRegistro } from '../graphql/mutations'
@@ -22,6 +22,8 @@ type AppContextType = {
   isAuthenticated: () => boolean
   setData: (data: Date) => void
   data: Date
+  tipoData: unitOfTime.StartOf
+  setTipoData: (tipoData: unitOfTime.StartOf) => void
   valorEntrada: number
   valorSaida: number
   setRegistros: (registros: Registro[]) => void
@@ -45,6 +47,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null)
   const [registros, setRegistros] = useState<Registro[]>([])
   const [data, setData] = useState<Date>(new Date())
+  const [tipoData, setTipoData] = useState<unitOfTime.StartOf>('days')
 
   let onCreateListener: any
   let onDeleteListener: any
@@ -102,7 +105,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const valorEntrada = useMemo(() => {
     return registros.reduce((accumulator, registro) => {
       if (
-        moment(registro.data).isSame(moment(data), 'day') &&
+        moment(registro.data).isSame(moment(data), tipoData) &&
         registro.tipo === 'entrada'
       ) {
         return accumulator + registro.valor
@@ -115,7 +118,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const valorSaida = useMemo(() => {
     return registros.reduce((accumulator, registro) => {
       if (
-        moment(registro.data).isSame(moment(data), 'day') &&
+        moment(registro.data).isSame(moment(data), tipoData) &&
         registro.tipo === 'saida'
       ) {
         return accumulator + registro.valor
@@ -170,6 +173,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         valorSaida,
         data,
         setData,
+        tipoData,
+        setTipoData,
         onPageRendered,
         onPageUnmount
       }}>

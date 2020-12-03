@@ -13,12 +13,16 @@ const useStyles = makeStyles({
     width: '100%',
     position: 'fixed',
     bottom: 0,
-    backgroundColor: colors.indigo[800],
-    color: colors.common.white,
+    // backgroundColor: colors.indigo[800],
+    // color: colors.common.white,
+    'background-image': 'radial-gradient( circle farthest-corner at 10% 20%,  rgba(69,86,102,1) 0%, rgba(34,34,34,1) 90% )',
     zIndex: 100
   },
   navigationAction: {
-    color: colors.grey[50]
+    color: colors.grey[50],
+    '&$selected': {
+      color: colors.common.white
+    }
   },
   navigationActionSelected: {
     color: colors.common.white

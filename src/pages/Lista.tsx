@@ -38,7 +38,7 @@ const Lista: FC = () => {
       <Grid item md={12} xs={12}>
         <List className={classes.root}>
           {context?.registros.map((registro) => {
-            if (moment(registro.data).isSame(moment(context.data), 'day')) {
+            if (moment(registro.data).isSame(moment(context.data), context?.tipoData)) {
               return (
                 <Fragment key={registro.id}>
                   <ListItem role={undefined} button>

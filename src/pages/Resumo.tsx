@@ -1,39 +1,61 @@
-import { Button, Container, Grid, Typography, withStyles } from '@material-ui/core'
-import { common, green, red } from '@material-ui/core/colors'
+import {
+  Button,
+  Container,
+  Grid,
+  Typography,
+  withStyles,
+  colors
+} from '@material-ui/core'
 import { FC, useContext, useState } from 'react'
 import RegistrarDialog from '../components/RegistrarDialog'
 import { AppContext } from '../contexts/AppContext'
 import numeral from 'numeral'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 
 const InButton = withStyles({
   root: {
-    color: common.white,
-    backgroundColor: green[500],
-    padding: '50px 50px',
+    backgroundImage: 'linear-gradient(to right, #02AAB0 0%, #00CDAC  51%, #02AAB0  100%)',
+    margin: '10px',
+    padding: '45px 45px',
+    transition: '0.5s',
     minWidth: '100%',
-    fontSize: '16px',
+    'background-size': '200% auto',
+    color: 'white',
+    'box-shadow': '0 0 10px #ccc',
+    'border-radius': '10px',
     '&:hover': {
-      backgroundColor: green[700]
+      'background-position': 'right center',
+      color: '#fff',
+      'text-decoration': 'none'
     }
   }
 })(Button)
 
 const OutButton = withStyles({
   root: {
-    color: common.white,
-    backgroundColor: red[500],
-    padding: '50px 50px',
+    'background-image': 'linear-gradient(to right, #e52d27 0%, #b31217  51%, #e52d27  100%)',
+    margin: '10px',
+    padding: '45px 45px',
+    transition: '0.5s',
+    'background-size': '200% auto',
+    color: 'white',
+    'box-shadow': '0 0 10px #ccc',
+    'border-radius': '10px',
     minWidth: '100%',
-    fontSize: '16px',
     '&:hover': {
-      backgroundColor: red[700]
+      'background-position': 'right center',
+      color: '#fff',
+      'text-decoration': 'none'
     }
   }
 })(Button)
 
 const Resumo: FC = () => {
   const [registrarDialogOpen, setRegistrarDialogOpen] = useState(false)
-  const [tipoRegistro, setTipoRegistro] = useState<'entrada' | 'saida'>('entrada')
+  const [tipoRegistro, setTipoRegistro] = useState<'entrada' | 'saida'>(
+    'entrada'
+  )
   const context = useContext(AppContext)
 
   const handleClose = () => {
@@ -46,23 +68,53 @@ const Resumo: FC = () => {
   }
 
   return (
-  <Container style={{ marginTop: '20px' }}>
-    <Grid justify="center" alignItems="center" item container direction="column">
-      <Grid justify="center" container item md={12}>
-  <Typography variant="h6">Entrada: R$ {numeral(context?.valorEntrada).format('0,0.00')}</Typography>
+    <Container style={{ marginTop: '20px' }}>
+      <Grid
+        justify="center"
+        alignItems="center"
+        item
+        container
+        direction="column">
+        <Grid justify="center" container item md={12}>
+          <Typography style={{ color: colors.green[500] }} variant="h6">
+            R$ {numeral(context?.valorEntrada).format('0,0.00')}
+          </Typography>
+        </Grid>
+        <Grid justify="center" container item md={12}>
+          <InButton
+            onClick={() => {
+              handleOpenRegistroDialog('entrada')
+            }}
+            startIcon={<ArrowDownwardIcon />}
+            >Registrar entrada
+          </InButton>
+        </Grid>
+        <Grid
+          style={{ paddingTop: '2.5rem' }}
+          justify="center"
+          container
+          item
+          md={12}>
+          <Typography style={{ color: colors.red[500] }} variant="h6">
+            R$ {numeral(context?.valorSaida).format('0,0.00')}
+          </Typography>
+        </Grid>
+        <Grid justify="center" container item md={12}>
+          <OutButton
+            onClick={() => {
+              handleOpenRegistroDialog('saida')
+            }}
+            endIcon={<ArrowUpwardIcon />}>
+            Registrar saída
+          </OutButton>
+        </Grid>
       </Grid>
-      <Grid justify="center" container item md={12}>
-        <InButton onClick={() => { handleOpenRegistroDialog('entrada') }}>Registrar entrada</InButton>
-      </Grid>
-      <Grid style={{ paddingTop: '2.5rem' }} justify="center" container item md={12}>
-        <Typography variant="h6">Saida: R$ {numeral(context?.valorSaida).format('0,0.00')}</Typography>
-      </Grid>
-      <Grid justify="center" container item md={12}>
-        <OutButton onClick={() => { handleOpenRegistroDialog('saida') }}>Registrar saída</OutButton>
-      </Grid>
-    </Grid>
-    <RegistrarDialog open={registrarDialogOpen} onClose={handleClose} tipoRegistro={tipoRegistro} />
-  </Container>
+      <RegistrarDialog
+        open={registrarDialogOpen}
+        onClose={handleClose}
+        tipoRegistro={tipoRegistro}
+      />
+    </Container>
   )
 }
 
