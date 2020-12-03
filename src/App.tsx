@@ -3,25 +3,7 @@ import AppProvider from './contexts/AppContext'
 import Router from './router/Router'
 import { CssBaseline } from '@material-ui/core'
 import numeral from 'numeral'
-
-numeral.register('locale', 'pt-br', {
-  delimiters: {
-    thousands: '.',
-    decimal: ','
-  },
-  abbreviations: {
-    thousand: 'k',
-    million: 'm',
-    billion: 'b',
-    trillion: 't'
-  },
-  ordinal: function (number) {
-    return number === 1 ? 'er' : 'ème'
-  },
-  currency: {
-    symbol: 'R$'
-  }
-})
+import 'numeral/locales/pt-br'
 
 numeral.locale('pt-br')
 

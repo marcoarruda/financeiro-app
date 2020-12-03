@@ -1,64 +1,110 @@
-import { Auth } from 'aws-amplify'
+import { API, graphqlOperation } from 'aws-amplify'
 import moment from 'moment'
-// import moment from 'moment'
-import { useState, createContext, ReactNode, useEffect, useMemo } from 'react'
+import { useState, createContext, ReactNode, useMemo } from 'react'
+
+import { createRegistro, deleteRegistro } from '../graphql/mutations'
+import {
+  onCreateRegistro,
+  onDeleteRegistro,
+  onUpdateRegistro
+} from '../graphql/subscriptions'
 
 type AppContextType = {
   user: any
   setUser: (user: any) => void
   registros: Registro[]
-  addRegistro: (registro: { tipo: 'entrada' | 'saida', descricao: string, valor: number }) => void
-  removeRegistro: (registroId: number) => void
+  addRegistro: (registro: {
+    tipo: 'entrada' | 'saida'
+    descricao: string
+    valor: number
+  }) => Promise<void>
+  removeRegistro: (registroId: string | undefined) => void
   isAuthenticated: () => boolean
   setData: (data: Date) => void
   data: Date
   valorEntrada: number
   valorSaida: number
+  setRegistros: (registros: Registro[]) => void
+  onPageRendered: () => Promise<void>
+  onPageUnmount: () => void
 }
 
 type Registro = {
-  id: number
+  id?: string | undefined
   tipo: 'entrada' | 'saida'
   descricao: string
   valor: number
   data: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined)
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null)
-  const [registros, setRegistros] = useState<Registro[]>([{
-    id: 1,
-    tipo: 'entrada',
-    descricao: 'Registro1',
-    valor: 123.12,
-    data: new Date()
-  },
-  {
-    id: 2,
-    tipo: 'saida',
-    descricao: 'Registro2',
-    valor: 1235.50,
-    data: new Date()
-  }])
+  const [registros, setRegistros] = useState<Registro[]>([])
   const [data, setData] = useState<Date>(new Date())
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const newUser = await Auth.currentAuthenticatedUser()
+  let onCreateListener: any
+  let onDeleteListener: any
+  let onUpdateListener: any
 
-        setUser(newUser)
-      } catch (err) {
-
+  const onPageRendered = async () => {
+    const operationCreate: any = await API.graphql(
+      graphqlOperation(onCreateRegistro)
+    )
+    onCreateListener = operationCreate.subscribe({
+      next: (dados: any) => {
+        setRegistros((prevState) => [
+          ...prevState,
+          dados.value.data.onCreateRegistro
+        ])
       }
-    })()
-  }, [])
+    })
+
+    const operationDelete: any = await API.graphql(
+      graphqlOperation(onDeleteRegistro)
+    )
+    onDeleteListener = operationDelete.subscribe({
+      next: (dados: any) => {
+        setRegistros((prevState) => {
+          return prevState.filter(
+            (registro) => registro.id !== dados.value.data.onDeleteRegistro.id
+          )
+        })
+      }
+    })
+
+    const operationUpdate: any = await API.graphql(
+      graphqlOperation(onUpdateRegistro)
+    )
+    onUpdateListener = operationUpdate.subscribe({
+      next: (dados: any) => {
+        console.log('xd', dados.value.data.onUpdateRegistro)
+        setRegistros((prevState) => {
+          return prevState.map((registro) =>
+            registro.id === dados.value.data.onUpdateRegistro.id
+              ? { ...registro, ...dados.value.data.onUpdateRegistro }
+              : registro
+          )
+        })
+      }
+    })
+  }
+
+  const onPageUnmount = async () => {
+    onCreateListener?.unsubscribe()
+    onDeleteListener?.unsubscribe()
+    onUpdateListener?.unsubscribe()
+  }
 
   const valorEntrada = useMemo(() => {
     return registros.reduce((accumulator, registro) => {
-      if (moment(registro.data).isSame(moment(data), 'day') && registro.tipo === 'entrada') {
+      if (
+        moment(registro.data).isSame(moment(data), 'day') &&
+        registro.tipo === 'entrada'
+      ) {
         return accumulator + registro.valor
       } else {
         return accumulator
@@ -68,7 +114,10 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const valorSaida = useMemo(() => {
     return registros.reduce((accumulator, registro) => {
-      if (moment(registro.data).isSame(moment(data), 'day') && registro.tipo === 'saida') {
+      if (
+        moment(registro.data).isSame(moment(data), 'day') &&
+        registro.tipo === 'saida'
+      ) {
         return accumulator + registro.valor
       } else {
         return accumulator
@@ -76,22 +125,27 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     }, 0)
   }, [registros, data])
 
-  const addRegistro = (registro: { tipo: 'entrada' | 'saida', descricao: string, valor: number }) => {
-    // const horario = moment().format('HH:mm:ss')
-
-    const novoRegistro = {
-      id: registros.length + 1,
+  const addRegistro = async (registro: {
+    tipo: 'entrada' | 'saida'
+    descricao: string
+    valor: number
+  }) => {
+    const novoRegistroData = {
       tipo: registro.tipo,
       descricao: registro.descricao,
       valor: registro.valor,
-      data// : moment(moment(data).format('YYYY-MM-DD') + ' ' + horario).toDate()
+      data
     }
 
-    setRegistros([...registros, novoRegistro])
+    await API.graphql(
+      graphqlOperation(createRegistro, { input: novoRegistroData })
+    )
   }
 
-  const removeRegistro = (registroId: number) => {
-    setRegistros((registros) => (registros.filter(registro => registro.id !== registroId)))
+  const removeRegistro = async (registroId: string | undefined) => {
+    await API.graphql(
+      graphqlOperation(deleteRegistro, { input: { id: registroId } })
+    )
   }
 
   const isAuthenticated = () => {
@@ -102,8 +156,25 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  return <AppContext.Provider value={{ isAuthenticated, user, setUser, registros, addRegistro, removeRegistro, setData, data, valorEntrada, valorSaida }}>
-    { children }
-  </AppContext.Provider>
+  return (
+    <AppContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        setUser,
+        registros,
+        setRegistros,
+        addRegistro,
+        removeRegistro,
+        valorEntrada,
+        valorSaida,
+        data,
+        setData,
+        onPageRendered,
+        onPageUnmount
+      }}>
+      {children}
+    </AppContext.Provider>
+  )
 }
 export default AppProvider

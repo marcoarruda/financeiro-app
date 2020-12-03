@@ -3,19 +3,16 @@ import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Link from '@material-ui/core/Link'
+import { Link, useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-
 import { Auth } from 'aws-amplify'
-import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
+import { colors } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -26,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.primary.main
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -92,7 +89,7 @@ const SignUp: FC = () => {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <AccountCircleIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Cadastrar
@@ -182,6 +179,17 @@ const SignUp: FC = () => {
             Cadastrar
           </Button>
         </form>
+        <Grid container>
+          <Grid item container justify="center">
+            <Typography
+              component={Link}
+              to="/login"
+              variant="body2"
+              style={{ textDecoration: 'none', color: colors.indigo[400] }}>
+              Retornar para o login
+            </Typography>
+          </Grid>
+        </Grid>
       </div>
     </Container>
   )

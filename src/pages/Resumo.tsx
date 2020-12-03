@@ -48,16 +48,16 @@ const Resumo: FC = () => {
   return (
   <Container style={{ marginTop: '20px' }}>
     <Grid justify="center" alignItems="center" item container direction="column">
-      <Grid justify="center" container item md={2}>
+      <Grid justify="center" container item md={12}>
   <Typography variant="h6">Entrada: R$ {numeral(context?.valorEntrada).format('0,0.00')}</Typography>
       </Grid>
-      <Grid justify="center" container item md={4}>
+      <Grid justify="center" container item md={12}>
         <InButton onClick={() => { handleOpenRegistroDialog('entrada') }}>Registrar entrada</InButton>
       </Grid>
-      <Grid style={{ paddingTop: '20px' }} justify="center" container item md={2}>
+      <Grid style={{ paddingTop: '2.5rem' }} justify="center" container item md={12}>
         <Typography variant="h6">Saida: R$ {numeral(context?.valorSaida).format('0,0.00')}</Typography>
       </Grid>
-      <Grid justify="center" container item md={4}>
+      <Grid justify="center" container item md={12}>
         <OutButton onClick={() => { handleOpenRegistroDialog('saida') }}>Registrar saída</OutButton>
       </Grid>
     </Grid>

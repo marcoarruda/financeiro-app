@@ -3,9 +3,6 @@ import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
@@ -16,9 +13,10 @@ import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 
 import { Auth } from 'aws-amplify'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
+import { colors } from '@material-ui/core'
 
 function Alert (props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -33,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.primary.main
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -45,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 type FormData = {
-  phonenumber: string,
+  phonenumber: string
   password: string
 }
 
@@ -67,14 +65,17 @@ const Login: FC = () => {
     setLoading(true)
 
     Auth.signIn(phonenumber, password)
-      .then(user => {
-        localStorage.setItem('teste.login', user.signInUserSession.accessToken.jwtToken)
+      .then((user) => {
+        localStorage.setItem(
+          'teste.login',
+          user.signInUserSession.accessToken.jwtToken
+        )
 
         context?.setUser(user)
 
         history.push('/')
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.message)
 
         console.log(err)
@@ -95,7 +96,10 @@ const Login: FC = () => {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={classes.form}
+          noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -130,28 +134,33 @@ const Login: FC = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}
-          >
+            disabled={loading}>
             Entrar
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="/recover-password" variant="body2">
+              <Typography
+                component={Link}
+                to="/recover-password"
+                variant="body2"
+                style={{ textDecoration: 'none', color: colors.indigo[400] }}>
                 Esqueceu sua senha?
-              </Link>
+              </Typography>
             </Grid>
             <Grid item>
-              <Link href="/signup" variant="body2">
-                {'Não possui uma conta?'}
-              </Link>
+              <Typography
+                component={Link}
+                to="/signup"
+                variant="body2"
+                style={{ textDecoration: 'none', color: colors.indigo[400] }}>
+                Não possui uma conta?
+              </Typography>
             </Grid>
           </Grid>
         </form>
       </div>
       <Snackbar open={!!error} autoHideDuration={3000}>
-        <Alert severity="error">
-          { error }
-        </Alert>
+        <Alert severity="error">{error}</Alert>
       </Snackbar>
     </Container>
   )

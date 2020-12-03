@@ -4,13 +4,15 @@ import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepButton from '@material-ui/core/StepButton'
 import Avatar from '@material-ui/core/Avatar'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import Typography from '@material-ui/core/Typography'
 import RecoverPasswordStepOne from '../components/RecoverPasswordStepOne'
 import RecoverPasswordStepTwo from '../components/RecoverPasswordStepTwo'
-import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
 
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
+import { Link } from 'react-router-dom'
+import { colors } from '@material-ui/core'
 
 function Alert (props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.primary.main
     },
     form: {
       width: '100%', // Fix IE 11 issue.
@@ -92,7 +94,12 @@ const RecoverPassword: FC = () => {
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <RecoverPasswordStepOne handleComplete={handleComplete} setTelefone={setTelefone} />
+        return (
+          <RecoverPasswordStepOne
+            handleComplete={handleComplete}
+            setTelefone={setTelefone}
+          />
+        )
       case 1:
         return <RecoverPasswordStepTwo telefone={telefone} />
     }
@@ -100,25 +107,40 @@ const RecoverPassword: FC = () => {
 
   return (
     <div className={classes.paper}>
-      <Paper style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '2rem 1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '2rem 1rem'
+        }}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <VpnKeyIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Recuperação de Senha
         </Typography>
-        <Stepper activeStep={activeStep}>
+        <Stepper style={{ background: 'none' }} activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label}>
-              <StepButton
-                completed={completed[index]}>
-                {label}
-              </StepButton>
+              <StepButton completed={completed[index]}>{label}</StepButton>
             </Step>
           ))}
         </Stepper>
         {getStepContent(activeStep)}
-      </Paper>
+        <Grid container>
+          <Grid item container justify="center">
+            <Typography
+              component={Link}
+              to="/login"
+              variant="body2"
+              style={{ textDecoration: 'none', color: colors.indigo[400] }}>
+              Retornar para o login
+            </Typography>
+          </Grid>
+        </Grid>
+      </div>
     </div>
   )
 }

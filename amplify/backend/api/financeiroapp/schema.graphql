@@ -1,0 +1,9 @@
+type Registro @model {
+  id: ID!
+  tipo: String!
+  valor: Float!
+  descricao: String!
+  data: String!
+  createdAt: String!
+  updatedAt: String!
+}

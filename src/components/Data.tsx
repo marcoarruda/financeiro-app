@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useContext, useEffect } from 'react'
+import { FC, useContext } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
@@ -42,34 +42,44 @@ const Data: FC = () => {
   }
 
   return (
-    <Grid item container xs={12} sm={12} md={12} className={classes.container} alignItems='center' alignContent='center' justify='center'>
+    <Grid
+      item
+      container
+      xs={12}
+      sm={12}
+      md={12}
+      className={classes.container}
+      alignItems="center"
+      alignContent="center"
+      justify="center">
       {/* Arrow Previous */}
-      <Grid item container xs={2} sm={2} md={2} justify='center'>
+      <Grid item container xs={2} sm={2} md={2} justify="center">
         <IconButton onClick={diminuiData}>
-          <ArrowLeft/>
+          <ArrowLeft />
         </IconButton>
       </Grid>
 
       {/* Form */}
-      <Grid item container xs={8} sm={8} md={8} justify='center'>
+      <Grid item container xs={8} sm={8} md={8} justify="center">
         <form className={classes.form} noValidate>
-        <TextField
-          id="date"
-          label="Data"
-          type="date"
-          name="data"
-          value={moment(context?.data).format('YYYY-MM-DD')}
-          inputRef={register}
-          onChange={() => {
-            context?.setData(moment(getValues().data).toDate())
-          }}
-          className={classes.textField}
-        />
-      </form>
+          <TextField
+            id="date"
+            label="Data"
+            type="date"
+            name="data"
+            // views={['year', 'month']}
+            value={moment(context?.data).format('YYYY-MM-DD')}
+            inputRef={register}
+            onChange={() => {
+              context?.setData(moment(getValues().data).toDate())
+            }}
+            className={classes.textField}
+          />
+        </form>
 
-      {/* Arrow Next */}
+        {/* Arrow Next */}
       </Grid>
-      <Grid item container xs={2} sm={2} md={2} justify='center'>
+      <Grid item container xs={2} sm={2} md={2} justify="center">
         <IconButton onClick={aumentaData}>
           <ArrowRight />
         </IconButton>
