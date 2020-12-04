@@ -59,7 +59,7 @@ const Lista: FC = () => {
             if (moment(registro.data).isSame(moment(context.data), context?.tipoData)) {
               return (
                 <Fragment key={registro.id}>
-                  <ListItem role={undefined} button>
+                  <ListItem button>
                     <ListItemText
                       className={
                         registro.tipo === 'entrada'
