@@ -13,6 +13,7 @@ import { Auth } from 'aws-amplify'
 import { useForm } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
 import { colors } from '@material-ui/core'
+import InputMask from 'react-input-mask'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,15 +58,16 @@ const SignUp: FC = () => {
 
   const onSubmit = (data: FormData) => {
     const { telefone, password, firstName, lastName, email } = data
+    const phone = '+5567' + telefone.replaceAll('-', '')
     const attributes = {
       email: email,
       name: firstName + ' ' + lastName,
-      phone_number: telefone
+      phone_number: phone
     }
     setLoading(true)
 
     Auth.signUp({
-      username: telefone,
+      username: phone,
       password,
       attributes
     })
@@ -140,7 +142,12 @@ const SignUp: FC = () => {
               />
             </Grid>
             <Grid item xs={12}>
-            <TextField
+            <InputMask
+              mask="99999-9999"
+              maskPlaceholder={null}
+              disabled={false}
+            >
+              {() => <TextField
               variant="outlined"
               margin="normal"
               required
@@ -148,10 +155,12 @@ const SignUp: FC = () => {
               id="telefone"
               label="Número de Telefone"
               name="telefone"
+              autoComplete="telefone"
               inputRef={register({
                 required: true
               })}
-            />
+            />}
+            </InputMask>
             </Grid>
             <Grid item xs={12}>
               <TextField

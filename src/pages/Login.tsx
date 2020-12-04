@@ -8,6 +8,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
+import InputMask from 'react-input-mask'
 
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
@@ -63,8 +64,9 @@ const Login: FC = () => {
     const { phonenumber, password } = data
 
     setLoading(true)
+    const phone = '+5567' + phonenumber.replaceAll('-', '')
 
-    Auth.signIn(phonenumber, password)
+    Auth.signIn(phone, password)
       .then((user) => {
         localStorage.setItem(
           'teste.login',
@@ -100,7 +102,12 @@ const Login: FC = () => {
           onSubmit={handleSubmit(onSubmit)}
           className={classes.form}
           noValidate>
-          <TextField
+          <InputMask
+            mask="99999-9999"
+            maskPlaceholder={null}
+            disabled={false}
+          >
+            {() => <TextField
             variant="outlined"
             margin="normal"
             required
@@ -113,7 +120,8 @@ const Login: FC = () => {
             inputRef={register({
               required: true
             })}
-          />
+          />}
+          </InputMask>
           <TextField
             variant="outlined"
             margin="normal"

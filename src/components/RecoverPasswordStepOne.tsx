@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
+import InputMask from 'react-input-mask'
 
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
@@ -53,10 +54,10 @@ const RecoverPasswordStepOne: FC<{
   const onSubmit = async (data: FormData) => {
     const { telefone } = data
     setLoading(true)
+    const phone = '+5567' + telefone.replaceAll('-', '')
+    setTelefone(phone)
 
-    setTelefone(telefone)
-
-    Auth.forgotPassword(telefone)
+    Auth.forgotPassword(phone)
       .then((user) => {
         handleComplete()
         setLoading(false)
@@ -75,17 +76,26 @@ const RecoverPasswordStepOne: FC<{
       <CssBaseline />
       <div className={classes.paper}>
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-          <TextField
+        <InputMask
+            mask="99999-9999"
+            maskPlaceholder={null}
+            disabled={false}
+          >
+            {() => <TextField
             variant="outlined"
             margin="normal"
+            required
             fullWidth
-            name="telefone"
-            label="Telefone"
             id="telefone"
+            label="Número de Telefone"
+            name="telefone"
+            autoComplete="telefone"
+            autoFocus
             inputRef={register({
               required: true
             })}
-          />
+          />}
+          </InputMask>
           <Button
             type="submit"
             fullWidth
