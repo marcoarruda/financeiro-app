@@ -8,6 +8,7 @@ import Drawer from './Drawer'
 import { AppContext } from '../contexts/AppContext'
 import { Link, useHistory } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
+import { colors } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: 100
     },
     appBar: {
-      'background-image': 'radial-gradient( circle farthest-corner at 10% 20%,  rgba(69,86,102,1) 0%, rgba(34,34,34,1) 90% )'
+      backgroundColor: colors.blue[800]
     },
     menuButton: {
       marginRight: theme.spacing(2)
@@ -53,7 +54,7 @@ const Header: FC = () => {
             <MenuIcon />
           </IconButton> */}
           <Typography variant="subtitle1" className={classes.title}>
-            Bem vindo { context?.user ? context?.user.attributes.name.split(' ')[0] : 'Bem vindo' }
+            Bem vindo(a) { context?.user ? context?.user.attributes.name.split(' ')[0] : 'Bem vindo' }!
           </Typography>
           { context?.user
             ? <Button onClick={() => { onLogout() }} color="inherit">Sair</Button>

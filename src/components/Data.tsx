@@ -2,8 +2,8 @@ import { FC, useContext, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
-import ArrowRight from '@material-ui/icons/ArrowRight'
-import ArrowLeft from '@material-ui/icons/ArrowLeft'
+import ArrowForward from '@material-ui/icons/ArrowForward'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import { AppContext } from '../contexts/AppContext'
 import moment, { unitOfTime } from 'moment'
 import MomentUtils from '@date-io/moment'
@@ -12,7 +12,6 @@ import 'moment/locale/pt-br'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
-import InputLabel from '@material-ui/core/InputLabel'
 
 moment.locale('pt-br')
 moment.defineLocale('xd', {})
@@ -29,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     container: {
       marginTop: '0.6rem',
+      marginBottom: '0.6rem',
       zIndex: 0,
       paddingBottom: '0.6rem',
       borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
@@ -89,7 +89,7 @@ const Data: FC = () => {
         justify="center">
         <Grid item container xs={1} sm={1} md={1} justify="center">
           <IconButton onClick={diminuiData}>
-            <ArrowLeft />
+            <ArrowBack />
           </IconButton>
         </Grid>
         <Grid item container xs={10} sm={10} md={10} justify="center">
@@ -154,20 +154,10 @@ const Data: FC = () => {
         </Grid>
         <Grid item container xs={1} sm={1} md={1} justify="center">
           <IconButton onClick={aumentaData}>
-            <ArrowRight />
+            <ArrowForward />
           </IconButton>
         </Grid>
       </Grid>
-      <Grid
-        item
-        container
-        xs={12}
-        sm={12}
-        md={12}
-        className={classes.container}
-        alignItems="center"
-        alignContent="center"
-        justify="center"></Grid>
     </MuiPickersUtilsProvider>
   )
 }

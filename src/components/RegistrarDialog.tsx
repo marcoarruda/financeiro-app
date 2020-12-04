@@ -1,14 +1,13 @@
 import {
   DialogActions,
   DialogContent,
-  DialogContentText,
   InputAdornment,
   TextField
 } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { Fragment, useContext } from 'react'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
 import NumberFormatCustom from './NumberFormatCustom'

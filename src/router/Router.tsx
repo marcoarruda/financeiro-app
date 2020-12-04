@@ -19,6 +19,7 @@ import RecoverPassword from '../pages/RecoverPassword'
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/MainLayout'
 import { Auth } from 'aws-amplify'
+import Relatorio from '../pages/Relatorio'
 
 const ProtectedRoute = ({ children, component: Component, ...rest }: { component?: any, [key: string]: any }) => {
   const [isAuthenticated, setLoggedIn] = useState(false)
@@ -62,11 +63,12 @@ const Router: FC = () => {
     <BrowserRouter>
       <Switch>
         {/* Main Layout */}
-        <ProtectedRoute exact path={['/', '/grafico', '/lista']}>
+        <ProtectedRoute exact path={['/', '/grafico', '/lista', '/relatorio']}>
           <MainLayout>
             <Route exact path="/" component={Resumo} />
             <Route exact path="/grafico" component={Grafico} />
             <Route exact path="/lista" component={Lista} />
+            <Route exact path="/relatorio" component={Relatorio} />
           </MainLayout>
         </ProtectedRoute>
 

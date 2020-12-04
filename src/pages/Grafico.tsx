@@ -42,7 +42,7 @@ const Grafico: FC = () => {
 
   return (
     <Grid container item justify="center">
-      <PieChart width={300} height={300}>
+      {context ? context.valorEntrada && context.valorSaida > 0 ? (<PieChart width={300} height={300}>
         <Pie
           data={data}
           labelLine={false}
@@ -57,7 +57,7 @@ const Grafico: FC = () => {
           ))}
         </Pie>
         <Tooltip />
-      </PieChart>
+      </PieChart>) : (<>Nenhum registro encontrado</>) : (<>Nenhum registro encontrado</>)}
     </Grid>
   )
 }

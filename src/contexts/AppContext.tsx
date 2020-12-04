@@ -31,7 +31,7 @@ type AppContextType = {
   onPageUnmount: () => void
 }
 
-type Registro = {
+export type Registro = {
   id?: string | undefined
   tipo: 'entrada' | 'saida'
   descricao: string

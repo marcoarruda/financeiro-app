@@ -15,17 +15,16 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 
 const InButton = withStyles({
   root: {
-    backgroundImage: 'linear-gradient(to right, #02AAB0 0%, #00CDAC  51%, #02AAB0  100%)',
+    backgroundColor: colors.green[700],
     margin: '10px',
     padding: '45px 45px',
     transition: '0.5s',
     minWidth: '100%',
-    'background-size': '200% auto',
     color: 'white',
     'box-shadow': '0 0 10px #ccc',
     'border-radius': '10px',
     '&:hover': {
-      'background-position': 'right center',
+      backgroundColor: colors.green.A700,
       color: '#fff',
       'text-decoration': 'none'
     }
@@ -34,17 +33,16 @@ const InButton = withStyles({
 
 const OutButton = withStyles({
   root: {
-    'background-image': 'linear-gradient(to right, #e52d27 0%, #b31217  51%, #e52d27  100%)',
+    backgroundColor: colors.red.A700,
     margin: '10px',
     padding: '45px 45px',
     transition: '0.5s',
-    'background-size': '200% auto',
     color: 'white',
     'box-shadow': '0 0 10px #ccc',
     'border-radius': '10px',
     minWidth: '100%',
     '&:hover': {
-      'background-position': 'right center',
+      backgroundColor: colors.red[900],
       color: '#fff',
       'text-decoration': 'none'
     }

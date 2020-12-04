@@ -15,7 +15,16 @@ import numeral from 'numeral'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%'
+      maxHeight: '68vh',
+      minHeight: '68vh',
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      [theme.breakpoints.up(1350)]: {
+        maxHeight: '78vh',
+        minHeight: '78vh',
+        overflowY: 'auto',
+        overflowX: 'auto'
+      }
     },
     inText: {
       color: colors.green[500]

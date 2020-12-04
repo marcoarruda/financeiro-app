@@ -10,6 +10,7 @@ import React, { Fragment, useState } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import RestoreIcon from '@material-ui/icons/Restore'
+import PieChartIcon from '@material-ui/icons/PieChart'
 import AssessmentIcon from '@material-ui/icons/Assessment'
 import AssignmentIcon from '@material-ui/icons/Assignment'
 import { Link } from 'react-router-dom'
@@ -57,9 +58,9 @@ function TemporaryDrawer () {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Resumo', 'Gráficos', 'Lista'].map((text, index) => (
-          <ListItem button key={text} component={Link} to={index === 0 ? '/' : index === 1 ? '/grafico' : '/lista' }>
-            <ListItemIcon>{index === 2 ? <AssignmentIcon /> : index === 0 ? <RestoreIcon /> : <AssessmentIcon />}</ListItemIcon>
+        {['Resumo', 'Gráfico', 'Lista', 'Relatorio'].map((text, index) => (
+          <ListItem button key={text} component={Link} to={index === 0 ? '/' : index === 1 ? '/grafico' : index === 2 ? '/lista' : '/relatorio' }>
+            <ListItemIcon>{index === 2 ? <AssignmentIcon /> : index === 0 ? <RestoreIcon /> : index === 1 ? <PieChartIcon /> : <AssessmentIcon />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}

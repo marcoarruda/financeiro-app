@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import RestoreIcon from '@material-ui/icons/Restore'
-import AssessmentIcon from '@material-ui/icons/Assessment'
 import AssignmentIcon from '@material-ui/icons/Assignment'
+import PieChartIcon from '@material-ui/icons/PieChart'
 import { colors } from '@material-ui/core'
 import { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -15,7 +15,8 @@ const useStyles = makeStyles({
     bottom: 0,
     // backgroundColor: colors.indigo[800],
     // color: colors.common.white,
-    'background-image': 'radial-gradient( circle farthest-corner at 10% 20%,  rgba(69,86,102,1) 0%, rgba(34,34,34,1) 90% )',
+    // 'background-image': 'radial-gradient( circle farthest-corner at 10% 20%,  rgba(69,86,102,1) 0%, rgba(34,34,34,1) 90% )',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     zIndex: 100
   },
   navigationAction: {
@@ -42,9 +43,9 @@ const SimpleBottomNavigation: FC = () => {
       showLabels
       className={classes.navigation}
     >
-      <BottomNavigationAction component={Link} to="/" className={classes.navigationAction} label="Resumo" icon={<RestoreIcon />} />
-      <BottomNavigationAction component={Link} to="/grafico" className={classes.navigationAction} label="Gráfico" icon={<AssessmentIcon />} />
-      <BottomNavigationAction component={Link} to="/lista" className={classes.navigationAction} label="Lista" icon={<AssignmentIcon />} />
+      <BottomNavigationAction component={Link} to="/" label="Resumo" icon={<RestoreIcon />} />
+      <BottomNavigationAction component={Link} to="/grafico" label="Gráfico" icon={<PieChartIcon />} />
+      <BottomNavigationAction component={Link} to="/lista" label="Lista" icon={<AssignmentIcon />} />
     </BottomNavigation>
   )
 }
