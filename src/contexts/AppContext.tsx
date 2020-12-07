@@ -186,7 +186,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const registrosOrdenados = useMemo(() => {
-    return registros.sort((a, b) => (a.createdAt as Date > (b.createdAt as Date)) ? 1 : -1)
+    return registros.sort((a, b) => (a.createdAt as Date > (b.createdAt as Date)) ? -1 : 1)
   }, [registros])
 
   return (

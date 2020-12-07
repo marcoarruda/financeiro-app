@@ -58,7 +58,7 @@ const Grafico: FC = () => {
 
       if (context.valorSaida > 0) {
         newData.push({
-          name: 'Saida',
+          name: 'Saída',
           value: context.valorSaida,
           tipo: 'saida',
           percent: numeral((context.valorSaida / total) * 100).format('0.0')
@@ -167,7 +167,7 @@ const Grafico: FC = () => {
             }}
             disabled={ tipo === 'saida' }
             >
-            Saida
+            Saída
           </Button>
         </ButtonGroup>
       </Grid>

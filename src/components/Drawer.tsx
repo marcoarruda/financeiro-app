@@ -58,7 +58,7 @@ function TemporaryDrawer () {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Resumo', 'Gráfico', 'Lista', 'Relatorio'].map((text, index) => (
+        {['Resumo', 'Gráfico', 'Lista', 'Relatório'].map((text, index) => (
           <ListItem button key={text} component={Link} to={index === 0 ? '/' : index === 1 ? '/grafico' : index === 2 ? '/lista' : '/relatorio' }>
             <ListItemIcon>{index === 2 ? <AssignmentIcon /> : index === 0 ? <RestoreIcon /> : index === 1 ? <PieChartIcon /> : <AssessmentIcon />}</ListItemIcon>
             <ListItemText primary={text} />

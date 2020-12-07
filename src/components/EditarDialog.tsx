@@ -47,7 +47,7 @@ function EditarDialog (props: SimpleDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
       <form onSubmit={handleSubmit(onSubmit)}>
-      <DialogTitle id="form-dialog-title">Editar registro de { registroSelecionado?.tipo === 'entrada' ? 'Entrada' : 'Saida' }</DialogTitle>
+      <DialogTitle id="form-dialog-title">Editar registro de { registroSelecionado?.tipo === 'entrada' ? 'Entrada' : 'Saída' }</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
             { context.registros.map((registro) => (<Fragment key={registro.id}>{registro.descricao} { registro.valor }<br/></Fragment>)) }
