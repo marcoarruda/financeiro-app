@@ -2,7 +2,7 @@ import { API, graphqlOperation } from 'aws-amplify'
 import moment, { unitOfTime } from 'moment'
 import { useState, createContext, ReactNode, useMemo } from 'react'
 
-import { createRegistro, deleteRegistro } from '../graphql/mutations'
+import { createRegistro, deleteRegistro, updateRegistro } from '../graphql/mutations'
 import {
   onCreateRegistro,
   onDeleteRegistro,
@@ -18,6 +18,12 @@ type AppContextType = {
     descricao: string
     valor: number
   }) => Promise<void>
+  editarRegistro: (registro: {
+    id: string | undefined
+    tipo: 'entrada' | 'saida'
+    descricao: string
+    valor: number
+  }) => void
   removeRegistro: (registroId: string | undefined) => void
   isAuthenticated: () => boolean
   setData: (data: Date) => void
@@ -145,6 +151,25 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
+  const editarRegistro = async (registro: {
+    id: string | undefined
+    tipo: 'entrada' | 'saida'
+    descricao: string
+    valor: number
+  }) => {
+    const registroData = {
+      id: registro.id,
+      tipo: registro.tipo,
+      descricao: registro.descricao,
+      valor: registro.valor,
+      data
+    }
+
+    await API.graphql(
+      graphqlOperation(updateRegistro, { input: registroData })
+    )
+  }
+
   const removeRegistro = async (registroId: string | undefined) => {
     await API.graphql(
       graphqlOperation(deleteRegistro, { input: { id: registroId } })
@@ -168,6 +193,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         registros,
         setRegistros,
         addRegistro,
+        editarRegistro,
         removeRegistro,
         valorEntrada,
         valorSaida,

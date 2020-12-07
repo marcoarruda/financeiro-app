@@ -6,9 +6,11 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
+import CreateIcon from '@material-ui/icons/Create'
 import { AppContext } from '../contexts/AppContext'
 import { colors, Grid } from '@material-ui/core'
 import RemoveDialog from '../components/RemoveDialog'
+import EditarDialog from '../components/EditarDialog'
 import moment from 'moment'
 import numeral from 'numeral'
 
@@ -36,19 +38,25 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 const Lista: FC = () => {
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false)
-  const [registroId, setRegistroId] = useState<string | undefined>(
-    ''
-  )
+  const [editarDialogOpen, setEditarDialogOpen] = useState(false)
+  const [registroId, setRegistroId] = useState<string | undefined>('')
+  const [registroSelecionado, setRegistroSelecionado] = useState<Object>()
   const context = useContext(AppContext)
   const classes = useStyles()
 
   const handleClose = () => {
     setRemoveDialogOpen(false)
+    setEditarDialogOpen(false)
   }
 
   const handleDelete = (registroId: string | undefined) => {
     setRegistroId(registroId)
     setRemoveDialogOpen(true)
+  }
+
+  const handleEdit = (registro: any) => {
+    setRegistroSelecionado(registro)
+    setEditarDialogOpen(true)
   }
 
   return (
@@ -78,6 +86,13 @@ const Lista: FC = () => {
                     <ListItemSecondaryAction>
                       <IconButton
                         onClick={() => {
+                          handleEdit(registro)
+                        }}
+                        edge="end">
+                        <CreateIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
                           handleDelete(registro.id)
                         }}
                         edge="end">
@@ -97,6 +112,11 @@ const Lista: FC = () => {
         open={removeDialogOpen}
         onClose={handleClose}
         registroId={registroId}
+      />
+      <EditarDialog
+        open={editarDialogOpen}
+        onClose={handleClose}
+        registroSelecionado={registroSelecionado}
       />
     </Grid>
   )
