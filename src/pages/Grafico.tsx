@@ -6,36 +6,76 @@ import {
   ListItem,
   List,
   Divider,
-  Paper
+  Paper,
+  Typography
 } from '@material-ui/core'
-import { FC, Fragment, useContext, useMemo, useState } from 'react'
-import { PieChart, Pie, Tooltip, Cell } from 'recharts'
-import { AppContext } from '../contexts/AppContext'
+import { FC, Fragment, useContext, useEffect, useState } from 'react'
+import { PieChart, Pie, Cell } from 'recharts'
+import { AppContext, Registro } from '../contexts/AppContext'
 import numeral from 'numeral'
+import moment from 'moment'
 
 const Grafico: FC = () => {
   const [tipo, setTipo] = useState<'entrada' | 'saida' | 'todos'>('todos')
   const context = useContext(AppContext)
+  const [data, setData] = useState<
+    {
+      name: string
+      value: number
+      tipo: string
+      percent: string
+    }[]
+  >([])
+  const [registros, setRegistros] = useState<Registro[]>([])
 
-  const total = context.valorEntrada + context.valorSaida
+  useEffect(() => {
+    const registrosNovos = context.registros.filter((registro) =>
+      moment(registro.data).isSame(context.data, context.tipoData)
+    )
 
-  const dataFiltrada = useMemo(() => {
-    const data: {
+    setRegistros(registrosNovos)
+  }, [context.registros, context.tipoData, context.data])
+
+  useEffect(() => {
+    const newData: {
       name: string
       value: number
       tipo: string
       percent: string
     }[] = []
 
-    for (const registro of context.registros) {
+    if (tipo === 'todos') {
+      const total = context.valorEntrada + context.valorSaida
+
+      if (context.valorEntrada > 0) {
+        newData.push({
+          name: 'Entrada',
+          value: context.valorEntrada,
+          tipo: 'entrada',
+          percent: numeral((context.valorEntrada / total) * 100).format('0.0')
+        })
+      }
+
+      if (context.valorSaida > 0) {
+        newData.push({
+          name: 'Saida',
+          value: context.valorSaida,
+          tipo: 'saida',
+          percent: numeral((context.valorSaida / total) * 100).format('0.0')
+        })
+      }
+      return setData(newData)
+    }
+
+    for (const registro of registros) {
       if (registro.tipo === tipo) {
-        const dataProcurada = data.find(
+        const dataProcurada = newData.find(
           (e) => e.name === registro.descricao && registro.tipo === e.tipo
         )
         if (dataProcurada) {
           dataProcurada.value += registro.valor
         } else {
-          data.push({
+          newData.push({
             name: registro.descricao,
             value: registro.valor,
             tipo: registro.tipo,
@@ -45,34 +85,16 @@ const Grafico: FC = () => {
       }
     }
 
-    for (const dado of data) {
+    for (const dado of newData) {
       const percent =
-      dado.tipo === 'entrada'
-        ? dado.value / context.valorEntrada
-        : dado.value / context.valorSaida
+        dado.tipo === 'entrada'
+          ? dado.value / context.valorEntrada
+          : dado.value / context.valorSaida
       dado.percent = numeral(percent * 100).format('0.0')
     }
 
-    return data
-  }, [context.valorEntrada, context.valorSaida, tipo])
-
-  const data =
-    tipo === 'todos'
-      ? [
-          {
-            name: 'Entrada',
-            value: context.valorEntrada,
-            tipo: 'entrada',
-            percent: numeral((context.valorEntrada / total) * 100).format('0.0')
-          },
-          {
-            name: 'Saida',
-            value: context.valorSaida,
-            tipo: 'saida',
-            percent: numeral((context.valorSaida / total) * 100).format('0.0')
-          }
-        ]
-      : dataFiltrada
+    setData(newData)
+  }, [context.valorEntrada, context.valorSaida, tipo, registros])
 
   const COLORS = [
     '#0088FE',
@@ -143,60 +165,55 @@ const Grafico: FC = () => {
         </ButtonGroup>
       </Grid>
       <Grid container item justify="center">
-        {context ? (
-          context.valorEntrada && context.valorSaida > 0 ? (
-            <Grid item container justify="center">
-              <PieChart
-                width={300}
-                height={300}
-                margin={{ top: 0, left: 0, right: 0, bottom: 0 }}>
-                <Pie
-                  style={{ overflow: 'visible', margin: '0' }}
-                  data={data}
-                  labelLine={false}
-                  // label={true}
-                  label={renderCustomizedLabel}
-                  cursor="pointer"
-                  isAnimationActive={false}
-                  outerRadius={120}
-                  fill="#8884d8"
-                  dataKey="value">
-                  {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-              <Paper
-                style={{
-                  width: '100%',
-                  overflowY: 'scroll',
-                  maxHeight: '25vh'
-                }}
-                elevation={0}>
-                <List>
-                  {data.map((registro, index) => (
-                    <Fragment key={registro.name}>
-                      <ListItem
-                        button
-                        style={{ color: COLORS[index % COLORS.length] }}>
-                        R$ {numeral(registro.value).format('0,0.00')} -{' '}
-                        {registro.name} - {registro.percent}%
-                      </ListItem>
-                      {index !== data.length - 1 ? <Divider /> : null}
-                    </Fragment>
-                  ))}
-                </List>
-              </Paper>
-            </Grid>
-          ) : (
-            <>Nenhum registro encontrado</>
-          )
+        {data.length > 0 ? (
+          <Grid item container justify="center">
+            <PieChart
+              width={300}
+              height={300}
+              margin={{ top: 0, left: 0, right: 0, bottom: 0 }}>
+              <Pie
+                style={{ overflow: 'visible', margin: '0' }}
+                data={data}
+                labelLine={false}
+                // label={true}
+                label={renderCustomizedLabel}
+                cursor="pointer"
+                isAnimationActive={false}
+                outerRadius={120}
+                fill="#8884d8"
+                dataKey="value">
+                {data.map((entry: any, index: number) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+            <Paper
+              style={{
+                width: '100%',
+                overflowY: 'scroll',
+                maxHeight: '25vh'
+              }}
+              elevation={0}>
+              <List>
+                {data.map((registro: any, index: number) => (
+                  <Fragment key={registro.name}>
+                    <ListItem
+                      button
+                      style={{ color: COLORS[index % COLORS.length] }}>
+                      R$ {numeral(registro.value).format('0,0.00')} -{' '}
+                      {registro.name} - {registro.percent}%
+                    </ListItem>
+                    {index !== data.length - 1 ? <Divider /> : null}
+                  </Fragment>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
         ) : (
-          <>Nenhum registro encontrado</>
+          <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>Nenhum registro encontrado</Typography>
         )}
       </Grid>
     </Grid>
