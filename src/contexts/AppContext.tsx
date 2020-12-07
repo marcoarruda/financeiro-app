@@ -41,7 +41,7 @@ export type Registro = {
   updatedAt?: Date
 }
 
-export const AppContext = createContext<AppContextType | undefined>(undefined)
+export const AppContext = createContext<AppContextType>({} as AppContextType)
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null)

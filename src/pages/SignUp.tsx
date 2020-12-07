@@ -58,7 +58,7 @@ const SignUp: FC = () => {
 
   const onSubmit = (data: FormData) => {
     const { telefone, password, firstName, lastName, email } = data
-    const phone = '+5567' + telefone.replaceAll('-', '')
+    const phone = '+55' + telefone.replace(/[^\d]/g, '')
     const attributes = {
       email: email,
       name: firstName + ' ' + lastName,
@@ -143,7 +143,7 @@ const SignUp: FC = () => {
             </Grid>
             <Grid item xs={12}>
             <InputMask
-              mask="99999-9999"
+              mask="(99) 99999-9999"
               maskPlaceholder={null}
               disabled={false}
             >

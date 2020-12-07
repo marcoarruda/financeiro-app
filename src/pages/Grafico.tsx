@@ -8,7 +8,7 @@ import {
   Divider,
   Paper
 } from '@material-ui/core'
-import { FC, Fragment, useContext, useState } from 'react'
+import { FC, Fragment, useContext, useMemo, useState } from 'react'
 import { PieChart, Pie, Tooltip, Cell } from 'recharts'
 import { AppContext } from '../contexts/AppContext'
 import numeral from 'numeral'
@@ -17,52 +17,62 @@ const Grafico: FC = () => {
   const [tipo, setTipo] = useState<'entrada' | 'saida' | 'todos'>('todos')
   const context = useContext(AppContext)
 
-  const dataFiltrada = (): {
-    name: string
-    value: number
-    tipo: string
-    porcentagem: number
-  }[] => {
-    const datas = []
-    if (context) {
-      for (const registro of context?.registros) {
-        if (registro.tipo === tipo) {
-          const dataProcurada = datas.find(
-            (e) => e.name === registro.descricao && registro.tipo === e.tipo
-          )
-          if (dataProcurada) {
-            dataProcurada.value += registro.valor
-          } else {
-            datas.push({
-              name: registro.descricao,
-              value: registro.valor,
-              tipo: registro.tipo,
-              porcentagem: 0
-            })
-          }
+  const total = context.valorEntrada + context.valorSaida
+
+  const dataFiltrada = useMemo(() => {
+    const data: {
+      name: string
+      value: number
+      tipo: string
+      percent: string
+    }[] = []
+
+    for (const registro of context.registros) {
+      if (registro.tipo === tipo) {
+        const dataProcurada = data.find(
+          (e) => e.name === registro.descricao && registro.tipo === e.tipo
+        )
+        if (dataProcurada) {
+          dataProcurada.value += registro.valor
+        } else {
+          data.push({
+            name: registro.descricao,
+            value: registro.valor,
+            tipo: registro.tipo,
+            percent: '0'
+          })
         }
       }
     }
 
-    return datas
-  }
+    for (const dado of data) {
+      const percent =
+      dado.tipo === 'entrada'
+        ? dado.value / context.valorEntrada
+        : dado.value / context.valorSaida
+      dado.percent = numeral(percent * 100).format('0.0')
+    }
+
+    return data
+  }, [context.valorEntrada, context.valorSaida, tipo])
+
   const data =
     tipo === 'todos'
       ? [
           {
             name: 'Entrada',
-            value: context?.valorEntrada,
+            value: context.valorEntrada,
             tipo: 'entrada',
-            porcentagem: 0
+            percent: numeral((context.valorEntrada / total) * 100).format('0.0')
           },
           {
             name: 'Saida',
-            value: context?.valorSaida,
+            value: context.valorSaida,
             tipo: 'saida',
-            porcentagem: 0
+            percent: numeral((context.valorSaida / total) * 100).format('0.0')
           }
         ]
-      : dataFiltrada()
+      : dataFiltrada
 
   const COLORS = [
     '#0088FE',
@@ -96,7 +106,7 @@ const Grafico: FC = () => {
         fill="white"
         textAnchor={x > cx ? 'start' : 'end'}
         dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
+        {`${percent}%`}
       </text>
     )
   }
@@ -174,7 +184,7 @@ const Grafico: FC = () => {
                         button
                         style={{ color: COLORS[index % COLORS.length] }}>
                         R$ {numeral(registro.value).format('0,0.00')} -{' '}
-                        {registro.name} - {registro.porcentagem * 100}%
+                        {registro.name} - {registro.percent}%
                       </ListItem>
                       {index !== data.length - 1 ? <Divider /> : null}
                     </Fragment>

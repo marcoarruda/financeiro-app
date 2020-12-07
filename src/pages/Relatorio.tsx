@@ -121,7 +121,13 @@ const Relatorio: FC = () => {
                           : classes.outText
                       }
                       id={`checkbox-list-label-${registro.id}`}>
-                      {registro.descricao}
+                      <strong>
+                        R${' '}
+                        {registro.tipo === 'entrada'
+                          ? numeral(registro.valor).format('0,0.00')
+                          : numeral(-registro.valor).format('0,0.00')}
+                      </strong>{' '}
+                      - {registro.descricao}
                     </ListItemText>
                     <ListItemSecondaryAction>
                       <IconButton
@@ -145,16 +151,12 @@ const Relatorio: FC = () => {
         <Grid item container>
           <Grid item container justify="center">
             <Typography variant="body1">
-              {registroSelecionado ? (
-                <strong>
+              {<strong>
                   R${' '}
-                  {registroSelecionado?.tipo === 'entrada'
-                    ? numeral(registroSelecionado?.valor).format('0,0.00')
-                    : -numeral(registroSelecionado?.valor).format('0,0.00')}
-                </strong>
-              ) : (
-                <>{'Selecione um registro'}</>
-              )}
+                  {tipo === 'entrada'
+                    ? numeral(context?.valorEntrada).format('0,0.00')
+                    : '-' + numeral(context?.valorSaida).format('0,0.00')}
+                </strong>}
             </Typography>
           </Grid>
           <Grid item container justify="center">

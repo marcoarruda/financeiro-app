@@ -64,7 +64,7 @@ const Login: FC = () => {
     const { phonenumber, password } = data
 
     setLoading(true)
-    const phone = '+5567' + phonenumber.replaceAll('-', '')
+    const phone = '+55' + phonenumber.replace(/[^\d]/g, '')
 
     Auth.signIn(phone, password)
       .then((user) => {
@@ -103,7 +103,7 @@ const Login: FC = () => {
           className={classes.form}
           noValidate>
           <InputMask
-            mask="99999-9999"
+            mask="(99) 99999-9999"
             maskPlaceholder={null}
             disabled={false}
           >

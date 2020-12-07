@@ -60,7 +60,7 @@ const ConfirmSignUp: FC = () => {
     const { codigo, telefone } = data
 
     setLoading(true)
-    const phone = '+5567' + telefone.replaceAll('-', '')
+    const phone = '+55' + telefone.replace(/[^\d]/g, '')
 
     Auth.confirmSignUp(phone, codigo)
       .then(user => {
@@ -89,7 +89,7 @@ const ConfirmSignUp: FC = () => {
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
         <InputMask
-            mask="99999-9999"
+            mask="(99) 99999-9999"
             maskPlaceholder={null}
             disabled={false}
           >

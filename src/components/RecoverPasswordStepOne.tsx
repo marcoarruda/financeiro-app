@@ -54,7 +54,7 @@ const RecoverPasswordStepOne: FC<{
   const onSubmit = async (data: FormData) => {
     const { telefone } = data
     setLoading(true)
-    const phone = '+5567' + telefone.replaceAll('-', '')
+    const phone = '+55' + telefone.replace(/[^\d]/g, '')
     setTelefone(phone)
 
     Auth.forgotPassword(phone)
@@ -77,7 +77,7 @@ const RecoverPasswordStepOne: FC<{
       <div className={classes.paper}>
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
         <InputMask
-            mask="99999-9999"
+            mask="(99) 99999-9999"
             maskPlaceholder={null}
             disabled={false}
           >
