@@ -75,7 +75,7 @@ const Resumo: FC = () => {
         direction="column">
         <Grid justify="center" container item md={12}>
           <Typography style={{ color: colors.green[500] }} variant="h6">
-            R$ {numeral(context?.valorEntrada).format('0,0.00')}
+            R$ {numeral(context.valorEntrada).format('0,0.00')}
           </Typography>
         </Grid>
         <Grid justify="center" container item md={12}>
@@ -94,7 +94,7 @@ const Resumo: FC = () => {
           item
           md={12}>
           <Typography style={{ color: colors.red[500] }} variant="h6">
-            R$ {numeral(context?.valorSaida).format('0,0.00')}
+            R$ {numeral(context.valorSaida).format('0,0.00')}
           </Typography>
         </Grid>
         <Grid justify="center" container item md={12}>

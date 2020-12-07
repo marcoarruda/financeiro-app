@@ -23,6 +23,7 @@ type AppContextType = {
     tipo: 'entrada' | 'saida'
     descricao: string
     valor: number
+    data: Date
   }) => void
   removeRegistro: (registroId: string | undefined) => void
   isAuthenticated: () => boolean
@@ -90,7 +91,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     )
     onUpdateListener = operationUpdate.subscribe({
       next: (dados: any) => {
-        console.log('xd', dados.value.data.onUpdateRegistro)
         setRegistros((prevState) => {
           return prevState.map((registro) =>
             registro.id === dados.value.data.onUpdateRegistro.id
@@ -155,14 +155,15 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     id: string | undefined
     tipo: 'entrada' | 'saida'
     descricao: string
-    valor: number
+    valor: number,
+    data: Date
   }) => {
     const registroData = {
       id: registro.id,
       tipo: registro.tipo,
       descricao: registro.descricao,
       valor: registro.valor,
-      data
+      data: registro.data
     }
 
     await API.graphql(
@@ -184,13 +185,17 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const registrosOrdenados = useMemo(() => {
+    return registros.sort((a, b) => (a.createdAt as Date > (b.createdAt as Date)) ? 1 : -1)
+  }, [registros])
+
   return (
     <AppContext.Provider
       value={{
         isAuthenticated,
         user,
         setUser,
-        registros,
+        registros: registrosOrdenados,
         setRegistros,
         addRegistro,
         editarRegistro,

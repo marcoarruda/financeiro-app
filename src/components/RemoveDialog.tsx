@@ -21,7 +21,7 @@ function RemoveDialog (props: SimpleDialogProps) {
   const context = useContext(AppContext)
 
   const onSubmit = () => {
-    context?.removeRegistro(registroId)
+    context.removeRegistro(registroId)
     onClose()
   }
 

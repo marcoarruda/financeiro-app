@@ -55,23 +55,23 @@ const Data: FC = () => {
   }
 
   const diminuiData = () => {
-    context?.setData(
-      moment(context?.data)
-        .subtract(1, context?.tipoData as unitOfTime.DurationConstructor)
+    context.setData(
+      moment(context.data)
+        .subtract(1, context.tipoData as unitOfTime.DurationConstructor)
         .toDate()
     )
   }
 
   const aumentaData = () => {
-    context?.setData(
-      moment(context?.data)
-        .add(1, context?.tipoData as unitOfTime.DurationConstructor)
+    context.setData(
+      moment(context.data)
+        .add(1, context.tipoData as unitOfTime.DurationConstructor)
         .toDate()
     )
   }
 
   const alterarTipoData = (event: any) => {
-    context?.setTipoData(event.target.value)
+    context.setTipoData(event.target.value)
     setTipoData(event.target.value)
   }
 
@@ -132,22 +132,22 @@ const Data: FC = () => {
               style={{ maxWidth: '100px' }}
               fullWidth={false}
               views={
-                context?.tipoData === 'days'
+                context.tipoData === 'days'
                   ? ['date', 'month', 'year']
-                  : context?.tipoData === 'month'
+                  : context.tipoData === 'month'
                     ? ['month', 'year']
                     : ['year']
               }
               format={
-                context?.tipoData === 'days'
+                context.tipoData === 'days'
                   ? 'DD/MM/YYYY'
-                  : context?.tipoData === 'month'
+                  : context.tipoData === 'month'
                     ? 'MM/YYYY'
                     : 'YYYY'
               }
-              value={moment(context?.data)}
+              value={moment(context.data)}
               onChange={(data) => {
-                context?.setData(moment(data).toDate())
+                context.setData(moment(data).toDate())
               }}
             />
           </Grid>

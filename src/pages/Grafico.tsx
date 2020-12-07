@@ -93,17 +93,21 @@ const Grafico: FC = () => {
       dado.percent = numeral(percent * 100).format('0.0')
     }
 
+    newData.sort((a, b) => numeral(b.percent).value() - numeral(a.percent).value())
+
     setData(newData)
   }, [context.valorEntrada, context.valorSaida, tipo, registros])
 
   const COLORS = [
-    '#0088FE',
-    '#00C49F',
+    colors.green[500],
+    colors.red.A700,
     '#FFBB28',
     '#FF8042',
     '#8932a8',
     '#a88e32',
-    '#328ca8'
+    '#328ca8',
+    colors.pink[300],
+    colors.blue[500]
   ]
 
   const RADIAN = Math.PI / 180
@@ -142,25 +146,28 @@ const Grafico: FC = () => {
       <Grid item container justify="center">
         <ButtonGroup>
           <Button
-            style={{ backgroundColor: colors.green[600], color: 'white' }}
             onClick={() => {
               changeTipo('entrada')
-            }}>
+            }}
+            disabled={ tipo === 'entrada' }
+            >
             Entrada
           </Button>
           <Button
-            style={{ backgroundColor: colors.red.A700, color: 'white' }}
-            onClick={() => {
-              changeTipo('saida')
-            }}>
-            Saida
-          </Button>
-          <Button
-            style={{ backgroundColor: colors.blue.A700, color: 'white' }}
             onClick={() => {
               changeTipo('todos')
-            }}>
-            Todos
+            }}
+            disabled={ tipo === 'todos' }
+            >
+            Geral
+          </Button>
+          <Button
+            onClick={() => {
+              changeTipo('saida')
+            }}
+            disabled={ tipo === 'saida' }
+            >
+            Saida
           </Button>
         </ButtonGroup>
       </Grid>
@@ -168,8 +175,8 @@ const Grafico: FC = () => {
         {data.length > 0 ? (
           <Grid item container justify="center">
             <PieChart
-              width={300}
-              height={300}
+              width={220}
+              height={220}
               margin={{ top: 0, left: 0, right: 0, bottom: 0 }}>
               <Pie
                 style={{ overflow: 'visible', margin: '0' }}
@@ -179,7 +186,7 @@ const Grafico: FC = () => {
                 label={renderCustomizedLabel}
                 cursor="pointer"
                 isAnimationActive={false}
-                outerRadius={120}
+                outerRadius={100}
                 fill="#8884d8"
                 dataKey="value">
                 {data.map((entry: any, index: number) => (

@@ -7,8 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import CreateIcon from '@material-ui/icons/Create'
-import { AppContext } from '../contexts/AppContext'
-import { colors, Grid } from '@material-ui/core'
+import { AppContext, Registro } from '../contexts/AppContext'
+import { colors, Grid, Typography } from '@material-ui/core'
 import RemoveDialog from '../components/RemoveDialog'
 import EditarDialog from '../components/EditarDialog'
 import moment from 'moment'
@@ -29,10 +29,12 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     inText: {
-      color: colors.green[500]
+      color: colors.green[500],
+      marginRight: '20px'
     },
     outText: {
-      color: colors.red.A700
+      color: colors.red.A700,
+      marginRight: '20px'
     }
   })
 )
@@ -40,7 +42,9 @@ const Lista: FC = () => {
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false)
   const [editarDialogOpen, setEditarDialogOpen] = useState(false)
   const [registroId, setRegistroId] = useState<string | undefined>('')
-  const [registroSelecionado, setRegistroSelecionado] = useState<Object>()
+  const [registroSelecionado, setRegistroSelecionado] = useState<Registro>(
+    {} as Registro
+  )
   const context = useContext(AppContext)
   const classes = useStyles()
 
@@ -54,8 +58,9 @@ const Lista: FC = () => {
     setRemoveDialogOpen(true)
   }
 
-  const handleEdit = (registro: any) => {
+  const handleEdit = (registro: Registro) => {
     setRegistroSelecionado(registro)
+    console.log(registro)
     setEditarDialogOpen(true)
   }
 
@@ -63,8 +68,13 @@ const Lista: FC = () => {
     <Grid container>
       <Grid item md={12} xs={12}>
         <List className={classes.root}>
-          {context?.registros.map((registro) => {
-            if (moment(registro.data).isSame(moment(context.data), context?.tipoData)) {
+          {context.registros.map((registro) => {
+            if (
+              moment(registro.data).isSame(
+                moment(context.data),
+                context.tipoData
+              )
+            ) {
               return (
                 <Fragment key={registro.id}>
                   <ListItem button>
@@ -75,13 +85,15 @@ const Lista: FC = () => {
                           : classes.outText
                       }
                       id={`checkbox-list-label-${registro.id}`}>
-                      <strong>
-                        R${' '}
-                        {registro.tipo === 'entrada'
-                          ? numeral(registro.valor).format('0,0.00')
-                          : numeral(-registro.valor).format('0,0.00')}
-                      </strong>{' '}
-                      - {registro.descricao}
+                      <Typography variant="subtitle2">
+                        <strong>
+                          R${' '}
+                          {registro.tipo === 'entrada'
+                            ? numeral(registro.valor).format('0,0.00')
+                            : numeral(-registro.valor).format('0,0.00')}
+                        </strong>{' '}
+                        - {registro.descricao}
+                      </Typography>
                     </ListItemText>
                     <ListItemSecondaryAction>
                       <IconButton

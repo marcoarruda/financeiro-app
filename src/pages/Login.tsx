@@ -73,7 +73,7 @@ const Login: FC = () => {
           user.signInUserSession.accessToken.jwtToken
         )
 
-        context?.setUser(user)
+        context.setUser(user)
 
         history.push('/')
       })

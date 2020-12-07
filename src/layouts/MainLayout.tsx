@@ -26,16 +26,16 @@ const MainLayout: FC = ({ children }) => {
         const registros: any = await API.graphql(
           graphqlOperation(listRegistros)
         )
-        context?.setRegistros(registros.data.listRegistros.items)
+        context.setRegistros(registros.data.listRegistros.items)
 
-        context?.setUser(newUser)
+        context.setUser(newUser)
 
-        await context?.onPageRendered()
+        await context.onPageRendered()
       } catch (err) {}
     })()
 
     return () => {
-      context?.onPageUnmount()
+      context.onPageUnmount()
     }
   }, [])
 

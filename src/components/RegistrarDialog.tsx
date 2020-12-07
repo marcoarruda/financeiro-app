@@ -36,7 +36,7 @@ function RegistrarDialog (props: SimpleDialogProps) {
       valor
     }
 
-    context?.addRegistro(registro)
+    context.addRegistro(registro)
     onClose()
   }
 
@@ -46,7 +46,7 @@ function RegistrarDialog (props: SimpleDialogProps) {
       <DialogTitle id="form-dialog-title">Registrar { tipoRegistro === 'entrada' ? 'Entrada' : 'Saida' }</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
-            { context?.registros.map((registro) => (<Fragment key={registro.id}>{registro.descricao} { registro.valor }<br/></Fragment>)) }
+            { context.registros.map((registro) => (<Fragment key={registro.id}>{registro.descricao} { registro.valor }<br/></Fragment>)) }
           </DialogContentText> */}
           <TextField
             autoFocus

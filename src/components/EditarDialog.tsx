@@ -9,13 +9,13 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { AppContext } from '../contexts/AppContext'
+import { AppContext, Registro } from '../contexts/AppContext'
 import NumberFormatCustom from './NumberFormatCustom'
 
 type SimpleDialogProps = {
   open: boolean
   onClose: () => void
-  registroSelecionado: any
+  registroSelecionado: Registro
 }
 
 type FormData = {
@@ -26,7 +26,10 @@ type FormData = {
 function EditarDialog (props: SimpleDialogProps) {
   const { onClose, open, registroSelecionado } = props
 
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onChange'
+  })
   const context = useContext(AppContext)
 
   const onSubmit = ({ valor, descricao }: FormData) => {
@@ -37,8 +40,7 @@ function EditarDialog (props: SimpleDialogProps) {
       descricao,
       valor
     }
-    console.log(registro)
-    context?.editarRegistro(registro)
+    context.editarRegistro(registro)
     onClose()
   }
 
@@ -48,16 +50,15 @@ function EditarDialog (props: SimpleDialogProps) {
       <DialogTitle id="form-dialog-title">Editar registro de { registroSelecionado?.tipo === 'entrada' ? 'Entrada' : 'Saida' }</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
-            { context?.registros.map((registro) => (<Fragment key={registro.id}>{registro.descricao} { registro.valor }<br/></Fragment>)) }
+            { context.registros.map((registro) => (<Fragment key={registro.id}>{registro.descricao} { registro.valor }<br/></Fragment>)) }
           </DialogContentText> */}
           <TextField
-            autoFocus
             margin="dense"
             name="descricao"
             id="descricao"
             label="Descrição"
             type="text"
-            value={registroSelecionado?.descricao}
+            defaultValue={registroSelecionado.descricao}
             inputRef={register}
             fullWidth
           />
@@ -67,7 +68,7 @@ function EditarDialog (props: SimpleDialogProps) {
             id="valor"
             label="Valor"
             type="string"
-            value={registroSelecionado?.valor}
+            defaultValue={registroSelecionado.valor}
             inputRef={register({
               setValueAs: (value) => {
                 return Number(value.replaceAll('.', '').replaceAll(',', '.'))

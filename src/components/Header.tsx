@@ -39,7 +39,7 @@ const Header: FC = () => {
   const onLogout = async () => {
     await Auth.signOut()
 
-    context?.setUser(null)
+    context.setUser(null)
     localStorage.removeItem('teste.login')
 
     history.push('/login')
@@ -54,9 +54,9 @@ const Header: FC = () => {
             <MenuIcon />
           </IconButton> */}
           <Typography variant="subtitle1" className={classes.title}>
-            Bem vindo(a) { context?.user ? context?.user.attributes.name.split(' ')[0] : 'Bem vindo' }!
+            Bem vindo(a) { context.user ? context.user.attributes.name.split(' ')[0] : 'Bem vindo' }!
           </Typography>
-          { context?.user
+          { context.user
             ? <Button onClick={() => { onLogout() }} color="inherit">Sair</Button>
             : <Button to="/login" component={Link} color="inherit">Entrar</Button>
           }

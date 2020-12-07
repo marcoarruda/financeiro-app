@@ -4,8 +4,10 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
+import EditarDialog from '../components/EditarDialog'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
+import CreateIcon from '@material-ui/icons/Create'
 import { AppContext, Registro } from '../contexts/AppContext'
 import {
   Button,
@@ -50,19 +52,27 @@ const Relatorio: FC = () => {
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false)
   const [registroId, setRegistroId] = useState<string | undefined>('')
   const [tipo, setTipo] = useState<'entrada' | 'saida'>('entrada')
-  const [registroSelecionado, setRegistroSelecionado] = useState<Registro>()
+  const [registroSelecionado, setRegistroSelecionado] = useState<Registro>({} as Registro)
+  const [editarDialogOpen, setEditarDialogOpen] = useState(false)
 
   const context = useContext(AppContext)
   const classes = useStyles()
 
   const handleClose = () => {
     setRemoveDialogOpen(false)
+    setEditarDialogOpen(false)
     setRegistrarDialogOpen(false)
   }
 
   const handleDelete = (registroId: string | undefined) => {
     setRegistroId(registroId)
     setRemoveDialogOpen(true)
+  }
+
+  const handleEdit = (registro: Registro) => {
+    setRegistroSelecionado(registro)
+    console.log(registro)
+    setEditarDialogOpen(true)
   }
 
   const handleOpenRegistroDialog = () => {
@@ -72,7 +82,7 @@ const Relatorio: FC = () => {
   const changeTipo = (tipo: 'entrada' | 'saida') => {
     setTipo(tipo)
 
-    setRegistroSelecionado(undefined)
+    setRegistroSelecionado({} as Registro)
   }
 
   return (
@@ -97,11 +107,11 @@ const Relatorio: FC = () => {
           </ButtonGroup>
         </Grid>
         <List className={classes.root}>
-          {context?.registros.map((registro) => {
+          {context.registros.map((registro) => {
             if (
               moment(registro.data).isSame(
                 moment(context.data),
-                context?.tipoData
+                context.tipoData
               ) &&
               registro.tipo === tipo
             ) {
@@ -132,6 +142,13 @@ const Relatorio: FC = () => {
                     <ListItemSecondaryAction>
                       <IconButton
                         onClick={() => {
+                          handleEdit(registro)
+                        }}
+                        edge="end">
+                        <CreateIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
                           handleDelete(registro.id)
                         }}
                         edge="end">
@@ -154,8 +171,8 @@ const Relatorio: FC = () => {
               {<strong>
                   R${' '}
                   {tipo === 'entrada'
-                    ? numeral(context?.valorEntrada).format('0,0.00')
-                    : '-' + numeral(context?.valorSaida).format('0,0.00')}
+                    ? numeral(context.valorEntrada).format('0,0.00')
+                    : '-' + numeral(context.valorSaida).format('0,0.00')}
                 </strong>}
             </Typography>
           </Grid>
@@ -181,6 +198,11 @@ const Relatorio: FC = () => {
         open={registrarDialogOpen}
         onClose={handleClose}
         tipoRegistro={tipo}
+      />
+      <EditarDialog
+        open={editarDialogOpen}
+        onClose={handleClose}
+        registroSelecionado={registroSelecionado}
       />
     </Fragment>
   )

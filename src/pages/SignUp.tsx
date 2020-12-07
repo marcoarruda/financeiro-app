@@ -72,7 +72,7 @@ const SignUp: FC = () => {
       attributes
     })
       .then(user => {
-        context?.setUser(user.user)
+        context.setUser(user.user)
 
         history.push('/confirm-signup')
       })
