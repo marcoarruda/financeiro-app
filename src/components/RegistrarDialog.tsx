@@ -7,13 +7,10 @@ import {
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
 import NumberFormatCustom from './NumberFormatCustom'
-import Menu, { MenuProps } from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
-import { withStyles } from '@material-ui/core/styles'
 import AutoComplete from '@material-ui/lab/Autocomplete'
 
 type SimpleDialogProps = {

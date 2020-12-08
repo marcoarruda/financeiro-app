@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react'
+import { FC, useContext } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
@@ -10,9 +10,7 @@ import moment, { unitOfTime } from 'moment'
 import MomentUtils from '@date-io/moment'
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import 'moment/locale/pt-br'
-import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
 import { Button } from '@material-ui/core'
 
 moment.locale('pt-br')

@@ -7,7 +7,7 @@ import {
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AppContext, Registro } from '../contexts/AppContext'
 import NumberFormatCustom from './NumberFormatCustom'

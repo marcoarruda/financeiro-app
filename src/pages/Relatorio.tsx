@@ -12,7 +12,6 @@ import { AppContext, Registro } from '../contexts/AppContext'
 import {
   Button,
   ButtonGroup,
-  Paper,
   colors,
   Grid,
   Typography,

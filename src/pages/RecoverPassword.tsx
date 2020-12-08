@@ -10,13 +10,8 @@ import RecoverPasswordStepOne from '../components/RecoverPasswordStepOne'
 import RecoverPasswordStepTwo from '../components/RecoverPasswordStepTwo'
 import Grid from '@material-ui/core/Grid'
 
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 import { Link } from 'react-router-dom'
 import { colors } from '@material-ui/core'
-
-function Alert (props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,8 +53,6 @@ const RecoverPassword: FC = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [completed, setCompleted] = useState<{ [k: number]: boolean }>({})
   const steps = ['Confirme a conta', 'Crie a Nova senha']
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
   const [telefone, setTelefone] = useState('')
 
   const completedSteps = () => {
@@ -72,10 +65,6 @@ const RecoverPassword: FC = () => {
 
   const allStepsCompleted = () => {
     return completedSteps() === steps.length
-  }
-
-  const handleStep = (step: number) => () => {
-    setActiveStep(step)
   }
 
   const handleComplete = () => {
