@@ -49,10 +49,7 @@ const SignUp: FC = () => {
   const [error, setError] = useState(null)
   const context = useContext(AppContext)
 
-  const { register, handleSubmit } = useForm<FormData>({
-    mode: 'onChange',
-    reValidateMode: 'onChange'
-  })
+  const { register, handleSubmit } = useForm<FormData>()
 
   const history = useHistory()
 
@@ -72,7 +69,7 @@ const SignUp: FC = () => {
       attributes
     })
       .then(user => {
-        context.setUser(user.user)
+        context.setUser({ username: user.user.getUsername(), password })
 
         history.push('/confirm-signup')
       })

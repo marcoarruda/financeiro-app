@@ -44,10 +44,7 @@ const RecoverPasswordStepOne: FC<{
   setTelefone: (telefone: string) => void
 }> = ({ handleComplete, setTelefone }) => {
   const classes = useStyles()
-  const { register, handleSubmit } = useForm<FormData>({
-    mode: 'onChange',
-    reValidateMode: 'onChange'
-  })
+  const { register, handleSubmit } = useForm<FormData>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 

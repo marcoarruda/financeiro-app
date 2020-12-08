@@ -53,10 +53,7 @@ const Login: FC = () => {
   const [error, setError] = useState(null)
   const context = useContext(AppContext)
 
-  const { register, handleSubmit } = useForm<FormData>({
-    mode: 'onChange',
-    reValidateMode: 'onChange'
-  })
+  const { register, handleSubmit } = useForm<FormData>()
 
   const history = useHistory()
 

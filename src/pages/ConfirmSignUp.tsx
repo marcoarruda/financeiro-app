@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useState, useContext } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import InputMask from 'react-input-mask'
+import { AppContext } from '../contexts/AppContext'
 
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.primary.main
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -46,13 +47,11 @@ type FormData = {
 }
 
 const ConfirmSignUp: FC = () => {
+  const context = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const { register, handleSubmit } = useForm<FormData>({
-    mode: 'onChange',
-    reValidateMode: 'onChange'
-  })
+  const { register, handleSubmit } = useForm<FormData>()
 
   const history = useHistory()
 
@@ -62,17 +61,20 @@ const ConfirmSignUp: FC = () => {
     setLoading(true)
     const phone = '+55' + telefone.replace(/[^\d]/g, '')
 
-    Auth.confirmSignUp(phone, codigo)
-      .then(user => {
-        history.push('/login')
-      })
-      .catch(err => {
-        setError(err.message)
+    try {
+      await Auth.confirmSignUp(phone, codigo)
 
-        console.log(err)
+      if (context.user) {
+        const user = await Auth.signIn(context.user.username, context.user.password)
+        context.setUser(user)
+      }
 
-        setLoading(false)
-      })
+      return history.push('/')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const classes = useStyles()
@@ -87,26 +89,39 @@ const ConfirmSignUp: FC = () => {
         <Typography component="h1" variant="h5">
           Confirmar
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
-        <InputMask
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={classes.form}
+          noValidate>
+          <Snackbar open={true}>
+            <Alert severity="info">
+              <Typography variant="body2">
+                Enviamos um código para o seu celular{' '}
+                {context.user?.username.split('+55')[1]}, confirme o mesmo para
+                a finalização do seu cadastro.
+              </Typography>
+            </Alert>
+          </Snackbar>
+          <InputMask
+            defaultValue={context.user?.username.split('+55')[1]}
             mask="(99) 99999-9999"
             maskPlaceholder={null}
-            disabled={false}
-          >
-            {() => <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="telefone"
-            label="Número de Telefone"
-            name="telefone"
-            autoComplete="telefone"
-            autoFocus
-            inputRef={register({
-              required: true
-            })}
-          />}
+            disabled={false}>
+            {() => (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="telefone"
+                label="Número de Telefone"
+                name="telefone"
+                autoComplete="telefone"
+                inputRef={register({
+                  required: true
+                })}
+              />
+            )}
           </InputMask>
           <TextField
             variant="outlined"
@@ -116,6 +131,7 @@ const ConfirmSignUp: FC = () => {
             name="codigo"
             label="Código"
             id="codigo"
+            autoFocus
             inputRef={register({
               required: true
             })}
@@ -126,16 +142,13 @@ const ConfirmSignUp: FC = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}
-          >
+            disabled={loading}>
             Confirmar
           </Button>
         </form>
       </div>
       <Snackbar open={!!error} autoHideDuration={3000}>
-        <Alert severity="error">
-          { error }
-        </Alert>
+        <Alert severity="error">{error}</Alert>
       </Snackbar>
     </Container>
   )

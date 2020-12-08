@@ -7,10 +7,11 @@ import {
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { useContext } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AppContext, Registro } from '../contexts/AppContext'
 import NumberFormatCustom from './NumberFormatCustom'
+import AutoComplete from '@material-ui/lab/Autocomplete'
 
 type SimpleDialogProps = {
   open: boolean
@@ -26,11 +27,21 @@ type FormData = {
 function EditarDialog (props: SimpleDialogProps) {
   const { onClose, open, registroSelecionado } = props
 
-  const { register, handleSubmit } = useForm({
-    mode: 'onChange',
-    reValidateMode: 'onChange'
-  })
+  const { register, handleSubmit } = useForm()
   const context = useContext(AppContext)
+  const [labels, setLabels] = useState<string[]>([])
+
+  useEffect(() => {
+    const newLabels: string[] = []
+
+    for (const registro of context.registros) {
+      if (!newLabels.find((label) => label === registro.descricao)) {
+        newLabels.push(registro.descricao)
+      }
+    }
+
+    setLabels(newLabels)
+  }, [context.registros])
 
   const onSubmit = ({ valor, descricao }: FormData) => {
     const registro = {
@@ -47,20 +58,27 @@ function EditarDialog (props: SimpleDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
       <form onSubmit={handleSubmit(onSubmit)}>
-      <DialogTitle id="form-dialog-title">Editar registro de { registroSelecionado?.tipo === 'entrada' ? 'Entrada' : 'Saída' }</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          Editar registro de{' '}
+          {registroSelecionado?.tipo === 'entrada' ? 'Entrada' : 'Saída'}
+        </DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            { context.registros.map((registro) => (<Fragment key={registro.id}>{registro.descricao} { registro.valor }<br/></Fragment>)) }
-          </DialogContentText> */}
-          <TextField
-            margin="dense"
-            name="descricao"
-            id="descricao"
-            label="Descrição"
-            type="text"
+          <AutoComplete
+            options={labels}
             defaultValue={registroSelecionado.descricao}
-            inputRef={register}
-            fullWidth
+            getOptionLabel={(option) => option}
+            freeSolo
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                name="descricao"
+                label="Descrição"
+                inputRef={register({
+                  required: true,
+                  minLength: 2
+                })}
+              />
+            )}
           />
           <TextField
             margin="dense"
@@ -96,30 +114,5 @@ function EditarDialog (props: SimpleDialogProps) {
     </Dialog>
   )
 }
-
-// const Registrar: FC = () => {
-//   const [open, setOpen] = useState(false)
-//   const [selectedValue, setSelectedValue] = useState(emails[1])
-
-//   const handleClickOpen = () => {
-//     setOpen(true)
-//   }
-
-//   const handleClose = (value: string) => {
-//     setOpen(false)
-//     setSelectedValue(value)
-//   }
-
-//   return (
-//     <div>
-//       <Typography variant="subtitle1">Selected: {selectedValue}</Typography>
-//       <br />
-//       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-//         Open simple dialog
-//       </Button>
-//       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
-//     </div>
-//   )
-// }
 
 export default EditarDialog

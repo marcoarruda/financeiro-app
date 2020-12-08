@@ -3,6 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowForward from '@material-ui/icons/ArrowForward'
+import RefreshIcon from '@material-ui/icons/Cached'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { AppContext } from '../contexts/AppContext'
 import moment, { unitOfTime } from 'moment'
@@ -12,6 +13,7 @@ import 'moment/locale/pt-br'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
+import { Button } from '@material-ui/core'
 
 moment.locale('pt-br')
 moment.defineLocale('xd', {})
@@ -36,6 +38,18 @@ const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120
+    },
+    root: {
+      marginLeft: '12px',
+      border: 0,
+      color: 'white',
+      height: 48,
+      width: 100,
+      padding: '0',
+      boxShadow: '0 0 6px rgba(0, 0, 0, .3)'
+    },
+    label: {
+      textTransform: 'capitalize'
     }
   })
 )
@@ -43,16 +57,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const Data: FC = () => {
   const classes = useStyles()
   const context = useContext(AppContext)
-  const [tipoData, setTipoData] = useState<string | number>('days')
-  const [open, setOpen] = useState(false)
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  const handleOpen = () => {
-    setOpen(true)
-  }
 
   const diminuiData = () => {
     context.setData(
@@ -70,9 +74,12 @@ const Data: FC = () => {
     )
   }
 
-  const alterarTipoData = (event: any) => {
-    context.setTipoData(event.target.value)
-    setTipoData(event.target.value)
+  const alterarTipoData = () => {
+    context.tipoData === 'days'
+      ? context.setTipoData('month')
+      : context.tipoData === 'month'
+        ? context.setTipoData('year')
+        : context.setTipoData('days')
   }
 
   return (
@@ -102,22 +109,18 @@ const Data: FC = () => {
             justify="center"
             alignContent="center">
             <FormControl className={classes.formControl}>
-              {/* <InputLabel id="demo-controlled-open-select-label">
-                Visualizar
-              </InputLabel> */}
-              <Select
-                style={{ maxWidth: '120px' }}
-                labelId="demo-controlled-open-select-label"
-                id="demo-controlled-open-select"
-                open={open}
-                onClose={handleClose}
-                onOpen={handleOpen}
-                value={tipoData}
-                onChange={alterarTipoData}>
-                <MenuItem value={'days'}>Ver por dia</MenuItem>
-                <MenuItem value={'month'}>Ver por mês</MenuItem>
-                <MenuItem value={'year'}>Ver por ano</MenuItem>
-              </Select>
+              <Button
+                classes={{ root: classes.root, label: classes.label }}
+                variant="contained"
+                color="primary"
+                onClick={alterarTipoData}
+                startIcon={<RefreshIcon />}>
+                {context.tipoData === 'days'
+                  ? 'Dia'
+                  : context.tipoData === 'month'
+                    ? 'Mês'
+                    : 'Ano'}
+              </Button>
             </FormControl>
           </Grid>
           <Grid
@@ -129,7 +132,7 @@ const Data: FC = () => {
             justify="center"
             alignContent="center">
             <DatePicker
-              style={{ maxWidth: '100px' }}
+              style={{ maxWidth: '100px', marginLeft: '1rem' }}
               fullWidth={false}
               views={
                 context.tipoData === 'days'
