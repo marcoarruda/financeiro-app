@@ -15,6 +15,7 @@ export const createRegistro = /* GraphQL */ `
       data
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -31,6 +32,7 @@ export const updateRegistro = /* GraphQL */ `
       data
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -47,6 +49,7 @@ export const deleteRegistro = /* GraphQL */ `
       data
       createdAt
       updatedAt
+      owner
     }
   }
 `;

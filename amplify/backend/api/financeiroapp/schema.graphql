@@ -1,4 +1,4 @@
-type Registro @model {
+type Registro @model @auth(rules: [{ allow: owner, ownerField: "owner" }]) {
   id: ID!
   tipo: String!
   valor: Float!
@@ -6,4 +6,5 @@ type Registro @model {
   data: String!
   createdAt: String!
   updatedAt: String!
+  owner: String!
 }

@@ -12,6 +12,7 @@ export const getRegistro = /* GraphQL */ `
       data
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -30,6 +31,7 @@ export const listRegistros = /* GraphQL */ `
         data
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }

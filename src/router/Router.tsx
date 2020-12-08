@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import {
   BrowserRouter,
   Switch,
@@ -20,10 +20,12 @@ import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/MainLayout'
 import { Auth } from 'aws-amplify'
 import Relatorio from '../pages/Relatorio'
+import { AppContext } from '../contexts/AppContext'
 
 const ProtectedRoute = ({ children, component: Component, ...rest }: { component?: any, [key: string]: any }) => {
   const [isAuthenticated, setLoggedIn] = useState(false)
   const [loading, setLoading] = useState(true)
+  const context = useContext(AppContext)
 
   useEffect(() => {
     (async () => {
@@ -32,7 +34,9 @@ const ProtectedRoute = ({ children, component: Component, ...rest }: { component
       try {
         setLoading(true)
         user = await Auth.currentAuthenticatedUser()
+
         setLoggedIn(!!user)
+        context.setUser(user)
       } catch (e) {
         setLoggedIn(false)
       } finally {

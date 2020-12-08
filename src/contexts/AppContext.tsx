@@ -1,8 +1,9 @@
-import { API, graphqlOperation } from 'aws-amplify'
+import { API, Auth, graphqlOperation } from 'aws-amplify'
 import moment, { unitOfTime } from 'moment'
-import { useState, createContext, ReactNode, useMemo } from 'react'
+import { useState, createContext, ReactNode, useMemo, useEffect } from 'react'
 
 import { createRegistro, deleteRegistro, updateRegistro } from '../graphql/mutations'
+import { listRegistros } from '../graphql/queries'
 import {
   onCreateRegistro,
   onDeleteRegistro,
@@ -51,7 +52,7 @@ export type Registro = {
 export const AppContext = createContext<AppContextType>({} as AppContextType)
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<any>(null)
   const [registros, setRegistros] = useState<Registro[]>([])
   const [data, setData] = useState<Date>(new Date())
   const [tipoData, setTipoData] = useState<unitOfTime.StartOf>('days')
@@ -62,7 +63,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const onPageRendered = async () => {
     const operationCreate: any = await API.graphql(
-      graphqlOperation(onCreateRegistro)
+      graphqlOperation(onCreateRegistro, { owner: user?.username })
     )
     onCreateListener = operationCreate.subscribe({
       next: (dados: any) => {
@@ -74,7 +75,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     })
 
     const operationDelete: any = await API.graphql(
-      graphqlOperation(onDeleteRegistro)
+      graphqlOperation(onDeleteRegistro, { owner: user?.username })
     )
     onDeleteListener = operationDelete.subscribe({
       next: (dados: any) => {
@@ -87,7 +88,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     })
 
     const operationUpdate: any = await API.graphql(
-      graphqlOperation(onUpdateRegistro)
+      graphqlOperation(onUpdateRegistro, { owner: user?.username })
     )
     onUpdateListener = operationUpdate.subscribe({
       next: (dados: any) => {
@@ -139,11 +140,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     descricao: string
     valor: number
   }) => {
+    console.log({ user })
     const novoRegistroData = {
       tipo: registro.tipo,
       descricao: registro.descricao,
       valor: registro.valor,
-      data
+      data,
+      owner: user.username
     }
 
     await API.graphql(
@@ -163,7 +166,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       tipo: registro.tipo,
       descricao: registro.descricao,
       valor: registro.valor,
-      data: registro.data
+      data: registro.data,
+      owner: user.username
     }
 
     await API.graphql(
@@ -188,6 +192,31 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const registrosOrdenados = useMemo(() => {
     return registros.sort((a, b) => (a.createdAt as Date > (b.createdAt as Date)) ? -1 : 1)
   }, [registros])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const newUser = await Auth.currentAuthenticatedUser()
+        const filter = {
+          eq: { owner: newUser.username }
+        }
+        const registros: any = await API.graphql(
+          graphqlOperation(listRegistros, { filter })
+        )
+        setRegistros(registros.data.listRegistros.items)
+
+        console.log(newUser)
+
+        setUser(newUser)
+
+        await onPageRendered()
+      } catch (err) {}
+    })()
+
+    return () => {
+      onPageUnmount()
+    }
+  }, [])
 
   return (
     <AppContext.Provider

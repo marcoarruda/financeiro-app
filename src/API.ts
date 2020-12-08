@@ -134,6 +134,7 @@ export type CreateRegistroMutation = {
     data: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -152,6 +153,7 @@ export type UpdateRegistroMutation = {
     data: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -170,6 +172,7 @@ export type DeleteRegistroMutation = {
     data: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -187,6 +190,7 @@ export type GetRegistroQuery = {
     data: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -208,9 +212,14 @@ export type ListRegistrosQuery = {
       data: string,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
+};
+
+export type OnCreateRegistroSubscriptionVariables = {
+  owner: string,
 };
 
 export type OnCreateRegistroSubscription = {
@@ -223,7 +232,12 @@ export type OnCreateRegistroSubscription = {
     data: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
+};
+
+export type OnUpdateRegistroSubscriptionVariables = {
+  owner: string,
 };
 
 export type OnUpdateRegistroSubscription = {
@@ -236,7 +250,12 @@ export type OnUpdateRegistroSubscription = {
     data: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
+};
+
+export type OnDeleteRegistroSubscriptionVariables = {
+  owner: string,
 };
 
 export type OnDeleteRegistroSubscription = {
@@ -249,5 +268,6 @@ export type OnDeleteRegistroSubscription = {
     data: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };

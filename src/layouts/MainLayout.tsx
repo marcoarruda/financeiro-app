@@ -23,9 +23,14 @@ const MainLayout: FC = ({ children }) => {
     (async () => {
       try {
         const newUser = await Auth.currentAuthenticatedUser()
+
+        const filter = {
+          owner: { eq: newUser.username }
+        }
         const registros: any = await API.graphql(
-          graphqlOperation(listRegistros)
+          graphqlOperation(listRegistros, { filter })
         )
+
         context.setRegistros(registros.data.listRegistros.items)
 
         context.setUser(newUser)
