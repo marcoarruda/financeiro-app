@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: 'inherit',
-      maxHeight: '50vh',
-      minHeight: '50vh',
+      maxHeight: '48vh',
+      minHeight: '48vh',
       overflowY: 'scroll',
       overflowX: 'hidden',
       [theme.breakpoints.up(1350)]: {
@@ -51,7 +51,9 @@ const Relatorio: FC = () => {
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false)
   const [registroId, setRegistroId] = useState<string | undefined>('')
   const [tipo, setTipo] = useState<'entrada' | 'saida'>('entrada')
-  const [registroSelecionado, setRegistroSelecionado] = useState<Registro>({} as Registro)
+  const [registroSelecionado, setRegistroSelecionado] = useState<Registro>(
+    {} as Registro
+  )
   const [editarDialogOpen, setEditarDialogOpen] = useState(false)
 
   const context = useContext(AppContext)
@@ -106,82 +108,94 @@ const Relatorio: FC = () => {
           </ButtonGroup>
         </Grid>
         <List className={classes.root}>
-          {context.registros.map((registro) => {
-            if (
-              moment(registro.data).isSame(
-                moment(context.data),
-                context.tipoData
-              ) &&
-              registro.tipo === tipo
-            ) {
-              return (
-                <Fragment key={registro.id}>
-                  <ListItem
-                    onClick={() => {
-                      setRegistroSelecionado(registro)
-                    }}
-                    selected={registroSelecionado?.id === registro.id}
-                    role={undefined}
-                    button>
-                    <ListItemText
-                      className={
-                        registro.tipo === 'entrada'
-                          ? classes.inText
-                          : classes.outText
-                      }
-                      id={`checkbox-list-label-${registro.id}`}>
-                      <strong>
-                        R${' '}
-                        {registro.tipo === 'entrada'
-                          ? numeral(registro.valor).format('0,0.00')
-                          : numeral(-registro.valor).format('0,0.00')}
-                      </strong>{' '}
-                      - {registro.descricao}
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-                      <IconButton
+          {context.registros.length > 0 ? (
+            <>
+              {context.registros.map((registro) => {
+                if (
+                  moment(registro.data).isSame(
+                    moment(context.data),
+                    context.tipoData
+                  ) &&
+                  registro.tipo === tipo
+                ) {
+                  return (
+                    <Fragment key={registro.id}>
+                      <ListItem
                         onClick={() => {
-                          handleEdit(registro)
+                          setRegistroSelecionado(registro)
                         }}
-                        edge="end">
-                        <CreateIcon />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => {
-                          handleDelete(registro.id)
-                        }}
-                        edge="end">
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                  <Divider />
-                </Fragment>
-              )
-            } else {
-              return null
-            }
-          })}
+                        selected={registroSelecionado?.id === registro.id}
+                        role={undefined}
+                        button>
+                        <ListItemText
+                          className={
+                            registro.tipo === 'entrada'
+                              ? classes.inText
+                              : classes.outText
+                          }
+                          id={`checkbox-list-label-${registro.id}`}>
+                          <strong>
+                            R${' '}
+                            {registro.tipo === 'entrada'
+                              ? numeral(registro.valor).format('0,0.00')
+                              : numeral(-registro.valor).format('0,0.00')}
+                          </strong>{' '}
+                          - {registro.descricao}
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            onClick={() => {
+                              handleEdit(registro)
+                            }}
+                            edge="end">
+                            <CreateIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => {
+                              handleDelete(registro.id)
+                            }}
+                            edge="end">
+                            <DeleteIcon />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                      <Divider />
+                    </Fragment>
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </>
+          ) : (
+            <Grid item container justify="center">
+              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                Nenhum registro encontrado
+              </Typography>
+            </Grid>
+          )}
         </List>
 
         <Grid item container>
-          <Grid item container justify="center">
+          <Grid item container justify="center" style={{ marginBottom: '0.3rem' }}>
             <Typography variant="body1">
-              {<strong>
+              {
+                <strong>
                   R${' '}
                   {tipo === 'entrada'
                     ? numeral(context.valorEntrada).format('0,0.00')
                     : '-' + numeral(context.valorSaida).format('0,0.00')}
-                </strong>}
+                </strong>
+              }
             </Typography>
           </Grid>
           <Grid item container justify="center">
             {tipo === 'entrada' ? (
-              <Button variant="contained" onClick={handleOpenRegistroDialog}>
+              <Button variant="outlined" onClick={handleOpenRegistroDialog}>
                 Registrar Entrada
               </Button>
             ) : (
-              <Button variant="contained" onClick={handleOpenRegistroDialog}>
+              <Button variant="outlined" onClick={handleOpenRegistroDialog}>
                 Registrar Saida
               </Button>
             )}

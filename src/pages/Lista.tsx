@@ -68,56 +68,66 @@ const Lista: FC = () => {
     <Grid container>
       <Grid item md={12} xs={12}>
         <List className={classes.root}>
-          {context.registros.map((registro) => {
-            if (
-              moment(registro.data).isSame(
-                moment(context.data),
-                context.tipoData
-              )
-            ) {
-              return (
-                <Fragment key={registro.id}>
-                  <ListItem button>
-                    <ListItemText
-                      className={
-                        registro.tipo === 'entrada'
-                          ? classes.inText
-                          : classes.outText
-                      }
-                      id={`checkbox-list-label-${registro.id}`}>
-                      <Typography variant="subtitle2">
-                        <strong>
-                          R${' '}
-                          {registro.tipo === 'entrada'
-                            ? numeral(registro.valor).format('0,0.00')
-                            : numeral(-registro.valor).format('0,0.00')}
-                        </strong>{' '}
-                        - {registro.descricao}
-                      </Typography>
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        onClick={() => {
-                          handleEdit(registro)
-                        }}
-                        edge="end">
-                        <CreateIcon />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => {
-                          handleDelete(registro.id)
-                        }}
-                        edge="end">
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </Fragment>
-              )
-            } else {
-              return null
-            }
-          })}
+          {context.registros.length > 0 ? (
+            <>
+              {context.registros.map((registro) => {
+                if (
+                  moment(registro.data).isSame(
+                    moment(context.data),
+                    context.tipoData
+                  )
+                ) {
+                  return (
+                    <Fragment key={registro.id}>
+                      <ListItem button>
+                        <ListItemText
+                          className={
+                            registro.tipo === 'entrada'
+                              ? classes.inText
+                              : classes.outText
+                          }
+                          id={`checkbox-list-label-${registro.id}`}>
+                          <Typography variant="subtitle2">
+                            <strong>
+                              R${' '}
+                              {registro.tipo === 'entrada'
+                                ? numeral(registro.valor).format('0,0.00')
+                                : numeral(-registro.valor).format('0,0.00')}
+                            </strong>{' '}
+                            - {registro.descricao}
+                          </Typography>
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            onClick={() => {
+                              handleEdit(registro)
+                            }}
+                            edge="end">
+                            <CreateIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => {
+                              handleDelete(registro.id)
+                            }}
+                            edge="end">
+                            <DeleteIcon />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    </Fragment>
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </>
+          ) : (
+            <Grid item container justify="center">
+              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                Nenhum registro encontrado
+              </Typography>
+            </Grid>
+          )}
         </List>
       </Grid>
       <RemoveDialog
