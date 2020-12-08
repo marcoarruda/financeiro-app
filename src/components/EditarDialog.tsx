@@ -35,13 +35,15 @@ function EditarDialog (props: SimpleDialogProps) {
     const newLabels: string[] = []
 
     for (const registro of context.registros) {
-      if (!newLabels.find((label) => label === registro.descricao)) {
-        newLabels.push(registro.descricao)
+      if (registro.tipo === registroSelecionado.tipo) {
+        if (!newLabels.find((label) => label === registro.descricao)) {
+          newLabels.push(registro.descricao)
+        }
       }
     }
 
     setLabels(newLabels)
-  }, [context.registros])
+  }, [context.registros, registroSelecionado])
 
   const onSubmit = ({ valor, descricao }: FormData) => {
     const registro = {

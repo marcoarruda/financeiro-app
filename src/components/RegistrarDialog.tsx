@@ -34,13 +34,15 @@ function RegistrarDialog (props: SimpleDialogProps) {
     const newLabels: string[] = []
 
     for (const registro of context.registros) {
-      if (!newLabels.find((label) => label === registro.descricao)) {
-        newLabels.push(registro.descricao)
+      if (registro.tipo === tipoRegistro) {
+        if (!newLabels.find((label) => label === registro.descricao)) {
+          newLabels.push(registro.descricao)
+        }
       }
     }
 
     setLabels(newLabels)
-  }, [context.registros])
+  }, [context.registros, tipoRegistro])
 
   const { register, handleSubmit } = useForm()
 
