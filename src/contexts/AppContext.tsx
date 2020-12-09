@@ -37,6 +37,8 @@ type AppContextType = {
   setRegistros: (registros: Registro[]) => void
   onPageRendered: () => Promise<void>
   onPageUnmount: () => void
+  notification: string
+  setNotification: (valor: string) => void
 }
 
 export type Registro = {
@@ -56,6 +58,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [registros, setRegistros] = useState<Registro[]>([])
   const [data, setData] = useState<Date>(new Date())
   const [tipoData, setTipoData] = useState<unitOfTime.StartOf>('days')
+  const [notification, setNotification] = useState('')
 
   let onCreateListener: any
   let onDeleteListener: any
@@ -71,6 +74,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
           ...prevState,
           dados.value.data.onCreateRegistro
         ])
+        setNotification('Um registro foi adicionado.')
       }
     })
 
@@ -84,6 +88,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
             (registro) => registro.id !== dados.value.data.onDeleteRegistro.id
           )
         })
+        setNotification('Um registro foi excluido.')
       }
     })
 
@@ -99,6 +104,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
               : registro
           )
         })
+        setNotification('Um registro foi alterado.')
       }
     })
   }
@@ -140,7 +146,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     descricao: string
     valor: number
   }) => {
-    console.log({ user })
     const novoRegistroData = {
       tipo: registro.tipo,
       descricao: registro.descricao,
@@ -205,8 +210,6 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         )
         setRegistros(registros.data.listRegistros.items)
 
-        console.log(newUser)
-
         setUser(newUser)
 
         await onPageRendered()
@@ -236,6 +239,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         tipoData,
         setTipoData,
         onPageRendered,
+        notification,
+        setNotification,
         onPageUnmount
       }}>
       {children}

@@ -72,7 +72,6 @@ const Relatorio: FC = () => {
 
   const handleEdit = (registro: Registro) => {
     setRegistroSelecionado(registro)
-    console.log(registro)
     setEditarDialogOpen(true)
   }
 

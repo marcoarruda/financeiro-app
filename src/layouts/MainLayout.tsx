@@ -6,6 +6,8 @@ import Footer from '../components/Footer'
 import { AppContext } from '../contexts/AppContext'
 import { API, Auth, graphqlOperation } from 'aws-amplify'
 import { listRegistros } from '../graphql/queries'
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,9 +17,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+function Alert (props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />
+}
+
 const MainLayout: FC = ({ children }) => {
   const classes = useStyles()
   const context = useContext(AppContext)
+
+  const onClose = () => {
+    context.setNotification('')
+  }
 
   useEffect(() => {
     (async () => {
@@ -34,6 +44,8 @@ const MainLayout: FC = ({ children }) => {
         context.setRegistros(registros.data.listRegistros.items)
 
         context.setUser(newUser)
+
+        console.log('rodou')
 
         await context.onPageRendered()
       } catch (err) {}
@@ -54,6 +66,10 @@ const MainLayout: FC = ({ children }) => {
         <Data />
         { children }
       </Grid>
+
+      <Snackbar open={context.notification !== ''} onClose={onClose} autoHideDuration={3000}>
+        <Alert severity="info">{context.notification}</Alert>
+      </Snackbar>
 
       {/* Footer */}
       <Footer />
