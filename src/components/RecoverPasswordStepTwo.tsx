@@ -13,6 +13,7 @@ import { Auth } from 'aws-amplify'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 type FormData = {
   password: string
@@ -77,7 +78,8 @@ const RecoverPasswordStepTwo: FC<{ telefone: string }> = ({ telefone }) => {
         setError(err.message)
 
         console.log(err)
-
+      })
+      .finally(() => {
         setLoading(false)
       })
   }
@@ -108,6 +110,9 @@ const RecoverPasswordStepTwo: FC<{ telefone: string }> = ({ telefone }) => {
             name="codigo"
             label="Código"
             id="codigo"
+            inputProps={{
+              inputMode: 'numeric'
+            }}
             inputRef={register({
               required: true
             })}
@@ -118,7 +123,8 @@ const RecoverPasswordStepTwo: FC<{ telefone: string }> = ({ telefone }) => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}>
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={14} />}>
             Confirmar
           </Button>
         </form>

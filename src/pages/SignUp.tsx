@@ -14,10 +14,11 @@ import { useForm } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
 import { colors } from '@material-ui/core'
 import InputMask from 'react-input-mask'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(1)
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
@@ -77,7 +78,8 @@ const SignUp: FC = () => {
         setError(err.message)
 
         console.log(err)
-
+      })
+      .finally(() => {
         setLoading(false)
       })
   }
@@ -156,6 +158,9 @@ const SignUp: FC = () => {
                     label="Número de Telefone"
                     name="telefone"
                     autoComplete="telefone"
+                    inputProps={{
+                      inputMode: 'numeric'
+                    }}
                     inputRef={register({
                       required: true
                     })}
@@ -184,7 +189,9 @@ const SignUp: FC = () => {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}>
+            className={classes.submit}
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={14} />}>
             Cadastrar
           </Button>
         </form>

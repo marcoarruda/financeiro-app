@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import InputMask from 'react-input-mask'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
@@ -63,7 +64,8 @@ const RecoverPasswordStepOne: FC<{
         setError(err.message)
 
         console.log(err)
-
+      })
+      .finally(() => {
         setLoading(false)
       })
   }
@@ -88,6 +90,9 @@ const RecoverPasswordStepOne: FC<{
                 name="telefone"
                 autoComplete="telefone"
                 autoFocus
+                inputProps={{
+                  inputMode: 'numeric'
+                }}
                 inputRef={register({
                   required: true
                 })}
@@ -100,7 +105,8 @@ const RecoverPasswordStepOne: FC<{
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}>
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={14} />}>
             Confirmar
           </Button>
         </form>

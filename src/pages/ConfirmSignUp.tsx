@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import InputMask from 'react-input-mask'
 import { AppContext } from '../contexts/AppContext'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
@@ -120,6 +121,9 @@ const ConfirmSignUp: FC = () => {
                 label="Número de Telefone"
                 name="telefone"
                 autoComplete="telefone"
+                inputProps={{
+                  inputMode: 'numeric'
+                }}
                 inputRef={register({
                   required: true
                 })}
@@ -135,6 +139,9 @@ const ConfirmSignUp: FC = () => {
             label="Código"
             id="codigo"
             autoFocus
+            inputProps={{
+              inputMode: 'numeric'
+            }}
             inputRef={register({
               required: true
             })}
@@ -145,7 +152,8 @@ const ConfirmSignUp: FC = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}>
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={14} />}>
             Confirmar
           </Button>
         </form>

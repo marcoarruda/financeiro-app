@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import { AppContext, Registro } from '../contexts/AppContext'
 import NumberFormatCustom from './NumberFormatCustom'
 import AutoComplete from '@material-ui/lab/Autocomplete'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 type SimpleDialogProps = {
   open: boolean
@@ -22,19 +23,21 @@ type SimpleDialogProps = {
 type FormData = {
   descricao: string
   valor: number
+  data: Date
 }
 
 function EditarDialog(props: SimpleDialogProps) {
   const { onClose, open, registroSelecionado } = props
 
   const { register, handleSubmit } = useForm()
-  const context = useContext(AppContext)
+  const { editarRegistro, registros } = useContext(AppContext)
   const [labels, setLabels] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const newLabels: string[] = []
 
-    for (const registro of context.registros) {
+    for (const registro of registros) {
       if (registro.tipo === registroSelecionado.tipo) {
         if (!newLabels.find((label) => label === registro.descricao)) {
           newLabels.push(registro.descricao)
@@ -43,18 +46,23 @@ function EditarDialog(props: SimpleDialogProps) {
     }
 
     setLabels(newLabels)
-  }, [context.registros, registroSelecionado])
+  }, [registros, registroSelecionado])
 
-  const onSubmit = ({ valor, descricao }: FormData) => {
-    const registro = {
-      id: registroSelecionado.id,
-      tipo: registroSelecionado.tipo,
-      data: registroSelecionado.data,
-      descricao,
-      valor
+  const onSubmit = async ({ valor, descricao }: FormData) => {
+    try {
+      setLoading(true)
+      const registro = {
+        id: registroSelecionado.id,
+        tipo: registroSelecionado.tipo,
+        data: registroSelecionado.data,
+        descricao,
+        valor
+      }
+      await editarRegistro(registro)
+      onClose()
+    } finally {
+      setLoading(false)
     }
-    context.editarRegistro(registro)
-    onClose()
   }
 
   return (
@@ -108,7 +116,11 @@ function EditarDialog(props: SimpleDialogProps) {
           <Button onClick={onClose} color="primary">
             Cancelar
           </Button>
-          <Button type="submit" color="primary">
+          <Button
+            type="submit"
+            color="primary"
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={14} />}>
             Salvar
           </Button>
         </DialogActions>

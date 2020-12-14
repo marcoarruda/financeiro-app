@@ -1,17 +1,13 @@
-import {
-  DialogActions,
-  DialogContent,
-  InputAdornment,
-  TextField
-} from '@material-ui/core'
+import { DialogActions, DialogContent, TextField } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import React, { useContext, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
-import NumberFormatCustom from './NumberFormatCustom'
 import AutoComplete from '@material-ui/lab/Autocomplete'
+import NumberFormat from 'react-number-format'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 type SimpleDialogProps = {
   open: boolean
@@ -21,19 +17,20 @@ type SimpleDialogProps = {
 
 type FormData = {
   descricao: string
-  valor: number
+  valor: string
 }
 
 function RegistrarDialog(props: SimpleDialogProps) {
   const { onClose, open, tipoRegistro } = props
 
   const [labels, setLabels] = useState<string[]>([])
-  const context = useContext(AppContext)
+  const [loading, setLoading] = useState(false)
+  const { addRegistro, registros } = useContext(AppContext)
 
   useEffect(() => {
     const newLabels: string[] = []
 
-    for (const registro of context.registros) {
+    for (const registro of registros) {
       if (registro.tipo === tipoRegistro) {
         if (!newLabels.find((label) => label === registro.descricao)) {
           newLabels.push(registro.descricao)
@@ -42,19 +39,38 @@ function RegistrarDialog(props: SimpleDialogProps) {
     }
 
     setLabels(newLabels)
-  }, [context.registros, tipoRegistro])
+  }, [registros, tipoRegistro])
 
-  const { register, handleSubmit } = useForm()
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      descricao: '',
+      valor: ' '
+    }
+  })
 
-  const onSubmit = ({ valor, descricao }: FormData) => {
-    const registro = {
-      tipo: tipoRegistro,
-      descricao,
-      valor
+  const onSubmit = async ({ valor, descricao }: FormData) => {
+    const valorNumber = Number(
+      valor?.split(' ')[1].split('.').join('').replace(',', '.')
+    )
+    if (descricao.trim().length === 0) {
+      return
     }
 
-    context.addRegistro(registro)
-    onClose()
+    const registro = {
+      tipo: tipoRegistro,
+      descricao: descricao.trim(),
+      valor: valorNumber
+    }
+
+    console.log({ valor, descricao })
+
+    try {
+      setLoading(true)
+      await addRegistro(registro)
+      onClose()
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -64,48 +80,52 @@ function RegistrarDialog(props: SimpleDialogProps) {
           Registrar {tipoRegistro === 'entrada' ? 'Entrada' : 'Saida'}
         </DialogTitle>
         <DialogContent>
-          <AutoComplete
-            options={labels}
-            getOptionLabel={(option) => option}
-            freeSolo
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                name="descricao"
-                label="Descrição"
-                inputRef={register({
-                  required: true,
-                  minLength: 2
-                })}
+          <Controller
+            render={(props) => (
+              <AutoComplete
+                {...props}
+                options={labels}
+                getOptionLabel={(option) => option}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField autoFocus {...params} label="Descrição" />
+                )}
+                onInputChange={(_, data) => props.onChange(data)}
+                onChange={(_, data) => props.onChange(data)}
               />
             )}
+            control={control}
+            name="descricao"
           />
-          <TextField
-            margin="dense"
-            name="valor"
-            id="valor"
+          <Controller
+            as={
+              <NumberFormat
+                customInput={TextField}
+                thousandSeparator="."
+                decimalSeparator=","
+                decimalScale={2}
+                prefix="R$ "
+                fixedDecimalScale
+                defaultValue=" "
+              />
+            }
             label="Valor"
-            type="string"
-            inputRef={register({
-              setValueAs: (value) => {
-                return Number(value.replaceAll('.', '').replaceAll(',', '.'))
-              },
-              required: true
-            })}
-            InputProps={{
-              inputComponent: NumberFormatCustom as any,
-              startAdornment: (
-                <InputAdornment position="start">R$</InputAdornment>
-              )
-            }}
-            fullWidth
+            control={control}
+            name="valor"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button
+            onClick={onClose}
+            color="primary"
+            style={{ marginRight: '10px' }}>
             Cancelar
           </Button>
-          <Button type="submit" color="primary">
+          <Button
+            type="submit"
+            color="primary"
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={14} />}>
             Salvar
           </Button>
         </DialogActions>

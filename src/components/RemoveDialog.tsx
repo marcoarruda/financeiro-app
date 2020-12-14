@@ -6,8 +6,9 @@ import {
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AppContext } from '../contexts/AppContext'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 type SimpleDialogProps = {
   open: boolean
@@ -17,11 +18,17 @@ type SimpleDialogProps = {
 
 function RemoveDialog(props: SimpleDialogProps) {
   const { onClose, open, registroId } = props
+  const [loading, setLoading] = useState(false)
 
-  const context = useContext(AppContext)
+  const { removeRegistro } = useContext(AppContext)
 
-  const onSubmit = () => {
-    context.removeRegistro(registroId)
+  const onSubmit = async () => {
+    try {
+      setLoading(true)
+      await removeRegistro(registroId)
+    } finally {
+      setLoading(false)
+    }
     onClose()
   }
 
@@ -37,7 +44,12 @@ function RemoveDialog(props: SimpleDialogProps) {
         <Button onClick={onClose} color="primary">
           Cancelar
         </Button>
-        <Button onClick={onSubmit} color="primary" autoFocus>
+        <Button
+          onClick={onSubmit}
+          color="primary"
+          autoFocus
+          disabled={loading}
+          startIcon={loading && <CircularProgress size={14} />}>
           Sim
         </Button>
       </DialogActions>

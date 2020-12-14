@@ -28,8 +28,8 @@ type AppContextType = {
     descricao: string
     valor: number
     data: Date
-  }) => void
-  removeRegistro: (registroId: string | undefined) => void
+  }) => Promise<void>
+  removeRegistro: (registroId: string | undefined) => Promise<void>
   isAuthenticated: () => boolean
   setData: (data: Date) => void
   data: Date
@@ -202,7 +202,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   }, [registros])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
         const newUser = await Auth.currentAuthenticatedUser()
         const filter = {
@@ -216,7 +216,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         setUser(newUser)
 
         await onPageRendered()
-      } catch (err) { }
+      } catch (err) {}
     })()
 
     return () => {

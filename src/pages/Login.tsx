@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import InputMask from 'react-input-mask'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
@@ -57,13 +58,13 @@ const Login: FC = () => {
 
   const history = useHistory()
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     const { phonenumber, password } = data
 
     setLoading(true)
     const phone = '+55' + phonenumber.replace(/[^\d]/g, '')
 
-    Auth.signIn(phone, password)
+    await Auth.signIn(phone, password)
       .then((user) => {
         localStorage.setItem(
           'teste.login',
@@ -78,7 +79,8 @@ const Login: FC = () => {
         setError(err.message)
 
         console.log(err)
-
+      })
+      .finally(() => {
         setLoading(false)
       })
   }
@@ -113,6 +115,9 @@ const Login: FC = () => {
                 label="Número de Telefone"
                 name="phonenumber"
                 autoComplete="phonenumber"
+                inputProps={{
+                  inputMode: 'numeric'
+                }}
                 autoFocus
                 inputRef={register({
                   required: true
@@ -140,7 +145,8 @@ const Login: FC = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}>
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={14} />}>
             Entrar
           </Button>
           <Grid container>
