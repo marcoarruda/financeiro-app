@@ -10,7 +10,7 @@ numeral.locale('pt-br')
 const App: FC = () => {
   return (
     <AppProvider>
-      <CssBaseline/>
+      <CssBaseline />
       <Router />
     </AppProvider>
   )

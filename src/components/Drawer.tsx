@@ -24,8 +24,8 @@ const useStyles = makeStyles({
   }
 })
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
-function TemporaryDrawer () {
+type Anchor = 'top' | 'left' | 'bottom' | 'right'
+function TemporaryDrawer() {
   const classes = useStyles()
   const [state, setState] = useState({
     top: false,
@@ -55,12 +55,33 @@ function TemporaryDrawer () {
       })}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+      onKeyDown={toggleDrawer(anchor, false)}>
       <List>
         {['Resumo', 'Gráfico', 'Lista', 'Relatório'].map((text, index) => (
-          <ListItem button key={text} component={Link} to={index === 0 ? '/' : index === 1 ? '/grafico' : index === 2 ? '/lista' : '/relatorio' }>
-            <ListItemIcon>{index === 2 ? <AssignmentIcon /> : index === 0 ? <RestoreIcon /> : index === 1 ? <PieChartIcon /> : <AssessmentIcon />}</ListItemIcon>
+          <ListItem
+            button
+            key={text}
+            component={Link}
+            to={
+              index === 0
+                ? '/'
+                : index === 1
+                  ? '/grafico'
+                  : index === 2
+                    ? '/lista'
+                    : '/relatorio'
+            }>
+            <ListItemIcon>
+              {index === 2 ? (
+                <AssignmentIcon />
+              ) : index === 0 ? (
+                <RestoreIcon />
+              ) : index === 1 ? (
+                <PieChartIcon />
+              ) : (
+                      <AssessmentIcon />
+                    )}
+            </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -72,10 +93,17 @@ function TemporaryDrawer () {
     <div>
       {(['left'] as Anchor[]).map((anchor) => (
         <Fragment key={anchor}>
-          <IconButton edge="start" onClick={toggleDrawer(anchor, true)} color="inherit" aria-label="menu">
+          <IconButton
+            edge="start"
+            onClick={toggleDrawer(anchor, true)}
+            color="inherit"
+            aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+          <Drawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
           </Drawer>
         </Fragment>

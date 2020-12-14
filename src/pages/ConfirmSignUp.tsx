@@ -17,7 +17,7 @@ import { Auth } from 'aws-amplify'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
-function Alert (props: AlertProps) {
+function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
@@ -65,7 +65,10 @@ const ConfirmSignUp: FC = () => {
       await Auth.confirmSignUp(phone, codigo)
 
       if (context.user) {
-        const user = await Auth.signIn(context.user.username, context.user.password)
+        const user = await Auth.signIn(
+          context.user.username,
+          context.user.password
+        )
         context.setUser(user)
       }
 

@@ -54,13 +54,22 @@ const Header: FC = () => {
             <MenuIcon />
           </IconButton> */}
           <Typography variant="subtitle1" className={classes.title}>
-            Bem vindo(a) { context.user ? context.user.attributes.name.split(' ')[0] : null }!
+            Bem vindo(a){' '}
+            {context.user ? context.user.attributes.name.split(' ')[0] : null}!
           </Typography>
-          { context.user
-            ? <Button onClick={() => { onLogout() }} color="inherit">Sair</Button>
-            : <Button to="/login" component={Link} color="inherit">Entrar</Button>
-          }
-
+          {context.user ? (
+            <Button
+              onClick={() => {
+                onLogout()
+              }}
+              color="inherit">
+              Sair
+            </Button>
+          ) : (
+              <Button to="/login" component={Link} color="inherit">
+                Entrar
+              </Button>
+            )}
         </Toolbar>
       </AppBar>
     </div>

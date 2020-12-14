@@ -83,8 +83,8 @@ const Resumo: FC = () => {
             onClick={() => {
               handleOpenRegistroDialog('entrada')
             }}
-            startIcon={<ArrowDownwardIcon />}
-            >Registrar entrada
+            startIcon={<ArrowDownwardIcon />}>
+            Registrar entrada
           </InButton>
         </Grid>
         <Grid

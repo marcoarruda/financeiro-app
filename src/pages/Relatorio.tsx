@@ -167,16 +167,20 @@ const Relatorio: FC = () => {
               })}
             </>
           ) : (
-            <Grid item container justify="center">
-              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
-                Nenhum registro encontrado
+              <Grid item container justify="center">
+                <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                  Nenhum registro encontrado
               </Typography>
-            </Grid>
-          )}
+              </Grid>
+            )}
         </List>
 
         <Grid item container>
-          <Grid item container justify="center" style={{ marginBottom: '0.3rem' }}>
+          <Grid
+            item
+            container
+            justify="center"
+            style={{ marginBottom: '0.3rem' }}>
             <Typography variant="body1">
               {
                 <strong>
@@ -194,10 +198,10 @@ const Relatorio: FC = () => {
                 Registrar Entrada
               </Button>
             ) : (
-              <Button variant="outlined" onClick={handleOpenRegistroDialog}>
-                Registrar Saida
-              </Button>
-            )}
+                <Button variant="outlined" onClick={handleOpenRegistroDialog}>
+                  Registrar Saida
+                </Button>
+              )}
           </Grid>
         </Grid>
       </Grid>

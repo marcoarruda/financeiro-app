@@ -24,7 +24,7 @@ type FormData = {
   valor: number
 }
 
-function RegistrarDialog (props: SimpleDialogProps) {
+function RegistrarDialog(props: SimpleDialogProps) {
   const { onClose, open, tipoRegistro } = props
 
   const [labels, setLabels] = useState<string[]>([])
@@ -69,10 +69,15 @@ function RegistrarDialog (props: SimpleDialogProps) {
             getOptionLabel={(option) => option}
             freeSolo
             renderInput={(params) => (
-              <TextField {...params} name='descricao' label="Descrição" inputRef={register({
-                required: true,
-                minLength: 2
-              })} />
+              <TextField
+                {...params}
+                name="descricao"
+                label="Descrição"
+                inputRef={register({
+                  required: true,
+                  minLength: 2
+                })}
+              />
             )}
           />
           <TextField

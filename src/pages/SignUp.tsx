@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 type FormData = {
-  telefone: string,
-  password: string,
-  firstName: string,
-  lastName: string,
-  email: string,
+  telefone: string
+  password: string
+  firstName: string
+  lastName: string
+  email: string
   remember: boolean
 }
 
@@ -68,12 +68,12 @@ const SignUp: FC = () => {
       password,
       attributes
     })
-      .then(user => {
+      .then((user) => {
         context.setUser({ username: user.user.getUsername(), password })
 
         history.push('/confirm-signup')
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.message)
 
         console.log(err)
@@ -93,7 +93,10 @@ const SignUp: FC = () => {
         <Typography component="h1" variant="h5">
           Cadastrar
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)} className={classes.form} noValidate>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={classes.form}
+          noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -139,25 +142,26 @@ const SignUp: FC = () => {
               />
             </Grid>
             <Grid item xs={12}>
-            <InputMask
-              mask="(99) 99999-9999"
-              maskPlaceholder={null}
-              disabled={false}
-            >
-              {() => <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="telefone"
-              label="Número de Telefone"
-              name="telefone"
-              autoComplete="telefone"
-              inputRef={register({
-                required: true
-              })}
-            />}
-            </InputMask>
+              <InputMask
+                mask="(99) 99999-9999"
+                maskPlaceholder={null}
+                disabled={false}>
+                {() => (
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="telefone"
+                    label="Número de Telefone"
+                    name="telefone"
+                    autoComplete="telefone"
+                    inputRef={register({
+                      required: true
+                    })}
+                  />
+                )}
+              </InputMask>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -180,8 +184,7 @@ const SignUp: FC = () => {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
-          >
+            className={classes.submit}>
             Cadastrar
           </Button>
         </form>

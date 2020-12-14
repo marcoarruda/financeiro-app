@@ -93,7 +93,9 @@ const Grafico: FC = () => {
       dado.percent = numeral(percent * 100).format('0.0')
     }
 
-    newData.sort((a, b) => numeral(b.percent).value() - numeral(a.percent).value())
+    newData.sort(
+      (a, b) => numeral(b.percent).value() - numeral(a.percent).value()
+    )
 
     setData(newData)
   }, [context.valorEntrada, context.valorSaida, tipo, registros])
@@ -149,24 +151,21 @@ const Grafico: FC = () => {
             onClick={() => {
               changeTipo('entrada')
             }}
-            disabled={ tipo === 'entrada' }
-            >
+            disabled={tipo === 'entrada'}>
             Entrada
           </Button>
           <Button
             onClick={() => {
               changeTipo('todos')
             }}
-            disabled={ tipo === 'todos' }
-            >
+            disabled={tipo === 'todos'}>
             Geral
           </Button>
           <Button
             onClick={() => {
               changeTipo('saida')
             }}
-            disabled={ tipo === 'saida' }
-            >
+            disabled={tipo === 'saida'}>
             Saída
           </Button>
         </ButtonGroup>
@@ -220,8 +219,10 @@ const Grafico: FC = () => {
             </Paper>
           </Grid>
         ) : (
-          <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>Nenhum registro encontrado</Typography>
-        )}
+            <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+              Nenhum registro encontrado
+            </Typography>
+          )}
       </Grid>
     </Grid>
   )

@@ -24,7 +24,7 @@ type FormData = {
   valor: number
 }
 
-function EditarDialog (props: SimpleDialogProps) {
+function EditarDialog(props: SimpleDialogProps) {
   const { onClose, open, registroSelecionado } = props
 
   const { register, handleSubmit } = useForm()

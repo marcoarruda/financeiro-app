@@ -1,8 +1,11 @@
 import { API, Auth, graphqlOperation } from 'aws-amplify'
 import moment, { unitOfTime } from 'moment'
 import { useState, createContext, ReactNode, useMemo, useEffect } from 'react'
-
-import { createRegistro, deleteRegistro, updateRegistro } from '../graphql/mutations'
+import {
+  createRegistro,
+  deleteRegistro,
+  updateRegistro
+} from '../graphql/mutations'
 import { listRegistros } from '../graphql/queries'
 import {
   onCreateRegistro,
@@ -163,7 +166,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     id: string | undefined
     tipo: 'entrada' | 'saida'
     descricao: string
-    valor: number,
+    valor: number
     data: Date
   }) => {
     const registroData = {
@@ -175,9 +178,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       owner: user.username
     }
 
-    await API.graphql(
-      graphqlOperation(updateRegistro, { input: registroData })
-    )
+    await API.graphql(graphqlOperation(updateRegistro, { input: registroData }))
   }
 
   const removeRegistro = async (registroId: string | undefined) => {
@@ -195,11 +196,13 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const registrosOrdenados = useMemo(() => {
-    return registros.sort((a, b) => (a.createdAt as Date > (b.createdAt as Date)) ? -1 : 1)
+    return registros.sort((a, b) =>
+      (a.createdAt as Date) > (b.createdAt as Date) ? -1 : 1
+    )
   }, [registros])
 
   useEffect(() => {
-    (async () => {
+    ; (async () => {
       try {
         const newUser = await Auth.currentAuthenticatedUser()
         const filter = {
@@ -213,7 +216,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         setUser(newUser)
 
         await onPageRendered()
-      } catch (err) {}
+      } catch (err) { }
     })()
 
     return () => {
@@ -247,4 +250,5 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     </AppContext.Provider>
   )
 }
+
 export default AppProvider

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function Alert (props: AlertProps) {
+function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
@@ -30,7 +30,7 @@ const MainLayout: FC = ({ children }) => {
   }
 
   useEffect(() => {
-    (async () => {
+    ; (async () => {
       try {
         const newUser = await Auth.currentAuthenticatedUser()
 
@@ -48,7 +48,7 @@ const MainLayout: FC = ({ children }) => {
         console.log('rodou')
 
         await context.onPageRendered()
-      } catch (err) {}
+      } catch (err) { }
     })()
 
     return () => {
@@ -62,12 +62,15 @@ const MainLayout: FC = ({ children }) => {
       <Header />
 
       {/* Container */}
-      <Grid container className={ classes.container }>
+      <Grid container className={classes.container}>
         <Data />
-        { children }
+        {children}
       </Grid>
 
-      <Snackbar open={context.notification !== ''} onClose={onClose} autoHideDuration={3000}>
+      <Snackbar
+        open={context.notification !== ''}
+        onClose={onClose}
+        autoHideDuration={3000}>
         <Alert severity="info">{context.notification}</Alert>
       </Snackbar>
 

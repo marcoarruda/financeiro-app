@@ -43,11 +43,28 @@ const SimpleBottomNavigation: FC = () => {
         setValue(newValue)
       }}
       showLabels
-      className={classes.navigation}
-    >
-      <BottomNavigationAction value='/' component={Link} to="/" label="Resumo" icon={<RestoreIcon />} />
-      <BottomNavigationAction value='/grafico' component={Link} to="/grafico" label="Gráfico" icon={<PieChartIcon />} />
-      <BottomNavigationAction value='/lista' component={Link} to="/lista" label="Lista" icon={<AssignmentIcon />} />
+      className={classes.navigation}>
+      <BottomNavigationAction
+        value="/"
+        component={Link}
+        to="/"
+        label="Resumo"
+        icon={<RestoreIcon />}
+      />
+      <BottomNavigationAction
+        value="/grafico"
+        component={Link}
+        to="/grafico"
+        label="Gráfico"
+        icon={<PieChartIcon />}
+      />
+      <BottomNavigationAction
+        value="/lista"
+        component={Link}
+        to="/lista"
+        label="Lista"
+        icon={<AssignmentIcon />}
+      />
     </BottomNavigation>
   )
 }

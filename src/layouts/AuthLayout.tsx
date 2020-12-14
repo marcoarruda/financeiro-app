@@ -6,24 +6,18 @@ const AuthLayout: FC = (props) => {
   const history = useHistory()
 
   useEffect(() => {
-    (async () => {
+    ; (async () => {
       try {
         const user = await Auth.currentAuthenticatedUser()
 
         if (user) {
           history.push('/')
         }
-      } catch (err) {
-
-      }
+      } catch (err) { }
     })()
   }, [])
 
-  return (
-    <div>
-      { props.children }
-    </div>
-  )
+  return <div>{props.children}</div>
 }
 
 export default AuthLayout

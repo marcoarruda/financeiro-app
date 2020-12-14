@@ -19,7 +19,7 @@ import { useForm } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
 import { colors } from '@material-ui/core'
 
-function Alert (props: AlertProps) {
+function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
@@ -102,22 +102,23 @@ const Login: FC = () => {
           <InputMask
             mask="(99) 99999-9999"
             maskPlaceholder={null}
-            disabled={false}
-          >
-            {() => <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="phonenumber"
-            label="Número de Telefone"
-            name="phonenumber"
-            autoComplete="phonenumber"
-            autoFocus
-            inputRef={register({
-              required: true
-            })}
-          />}
+            disabled={false}>
+            {() => (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="phonenumber"
+                label="Número de Telefone"
+                name="phonenumber"
+                autoComplete="phonenumber"
+                autoFocus
+                inputRef={register({
+                  required: true
+                })}
+              />
+            )}
           </InputMask>
           <TextField
             variant="outlined"

@@ -1,10 +1,5 @@
 import { FC, useContext, useEffect, useState } from 'react'
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
 // Paginas
 import Resumo from '../pages/Resumo'
@@ -22,13 +17,20 @@ import { Auth } from 'aws-amplify'
 import Relatorio from '../pages/Relatorio'
 import { AppContext } from '../contexts/AppContext'
 
-const ProtectedRoute = ({ children, component: Component, ...rest }: { component?: any, [key: string]: any }) => {
+const ProtectedRoute = ({
+  children,
+  component: Component,
+  ...rest
+}: {
+  component?: any
+  [key: string]: any
+}) => {
   const [isAuthenticated, setLoggedIn] = useState(false)
   const [loading, setLoading] = useState(true)
   const context = useContext(AppContext)
 
   useEffect(() => {
-    (async () => {
+    ; (async () => {
       let user = null
 
       try {
@@ -47,17 +49,20 @@ const ProtectedRoute = ({ children, component: Component, ...rest }: { component
 
   return (
     <Route
-    {...rest}
-    render={props => {
-      if (loading) {
-        return null
-      } else
-      if (isAuthenticated) {
-        return <>{ children }</>
-      } else {
-        return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-      }
-    }}
+      {...rest}
+      render={(props) => {
+        if (loading) {
+          return null
+        } else if (isAuthenticated) {
+          return <>{children}</>
+        } else {
+          return (
+            <Redirect
+              to={{ pathname: '/login', state: { from: props.location } }}
+            />
+          )
+        }
+      }}
     />
   )
 }
@@ -77,7 +82,9 @@ const Router: FC = () => {
         </ProtectedRoute>
 
         {/* Login */}
-        <Route exact path={['/login', '/signup', '/confirm-signup', '/recover-password']}>
+        <Route
+          exact
+          path={['/login', '/signup', '/confirm-signup', '/recover-password']}>
           <AuthLayout>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
@@ -85,7 +92,7 @@ const Router: FC = () => {
             <Route exact path="/recover-password" component={RecoverPassword} />
           </AuthLayout>
         </Route>
-        <Route path="*" component={() => (<Redirect to="/" />)}/>
+        <Route path="*" component={() => <Redirect to="/" />} />
       </Switch>
     </BrowserRouter>
   )

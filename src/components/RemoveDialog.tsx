@@ -15,7 +15,7 @@ type SimpleDialogProps = {
   registroId: string | undefined
 }
 
-function RemoveDialog (props: SimpleDialogProps) {
+function RemoveDialog(props: SimpleDialogProps) {
   const { onClose, open, registroId } = props
 
   const context = useContext(AppContext)
@@ -28,19 +28,19 @@ function RemoveDialog (props: SimpleDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">Excluir Registro</DialogTitle>
-        <DialogContent>
+      <DialogContent>
         <DialogContentText id="alert-dialog-description">
-            Tem certeza que deseja excluir este registro?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={onSubmit} color="primary" autoFocus>
-            Sim
-          </Button>
-        </DialogActions>
+          Tem certeza que deseja excluir este registro?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          Cancelar
+        </Button>
+        <Button onClick={onSubmit} color="primary" autoFocus>
+          Sim
+        </Button>
+      </DialogActions>
     </Dialog>
   )
 }

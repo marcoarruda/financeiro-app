@@ -12,7 +12,7 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 import { Auth } from 'aws-amplify'
 import { useForm } from 'react-hook-form'
 
-function Alert (props: AlertProps) {
+function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
@@ -73,25 +73,26 @@ const RecoverPasswordStepOne: FC<{
       <CssBaseline />
       <div className={classes.paper}>
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-        <InputMask
+          <InputMask
             mask="(99) 99999-9999"
             maskPlaceholder={null}
-            disabled={false}
-          >
-            {() => <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="telefone"
-            label="Número de Telefone"
-            name="telefone"
-            autoComplete="telefone"
-            autoFocus
-            inputRef={register({
-              required: true
-            })}
-          />}
+            disabled={false}>
+            {() => (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="telefone"
+                label="Número de Telefone"
+                name="telefone"
+                autoComplete="telefone"
+                autoFocus
+                inputRef={register({
+                  required: true
+                })}
+              />
+            )}
           </InputMask>
           <Button
             type="submit"
