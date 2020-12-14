@@ -78,7 +78,11 @@ const Lista: FC = () => {
                 ) {
                   return (
                     <Fragment key={registro.id}>
-                      <ListItem button>
+                      <ListItem
+                        button
+                        onClick={() => {
+                          handleEdit(registro)
+                        }}>
                         <ListItemText
                           className={
                             registro.tipo === 'entrada'
@@ -97,13 +101,6 @@ const Lista: FC = () => {
                           </Typography>
                         </ListItemText>
                         <ListItemSecondaryAction>
-                          <IconButton
-                            onClick={() => {
-                              handleEdit(registro)
-                            }}
-                            edge="end">
-                            <CreateIcon />
-                          </IconButton>
                           <IconButton
                             onClick={() => {
                               handleDelete(registro.id)

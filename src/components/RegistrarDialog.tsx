@@ -109,6 +109,9 @@ function RegistrarDialog(props: SimpleDialogProps) {
                 defaultValue=" "
               />
             }
+            inputProps={{
+              inputMode: 'numeric'
+            }}
             label="Valor"
             control={control}
             name="valor"

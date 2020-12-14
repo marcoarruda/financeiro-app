@@ -30,7 +30,7 @@ const MainLayout: FC = ({ children }) => {
   }
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
         const newUser = await Auth.currentAuthenticatedUser()
 
@@ -38,7 +38,7 @@ const MainLayout: FC = ({ children }) => {
           owner: { eq: newUser.username }
         }
         const registros: any = await API.graphql(
-          graphqlOperation(listRegistros, { filter })
+          graphqlOperation(listRegistros, { filter, limit: 500 })
         )
 
         context.setRegistros(registros.data.listRegistros.items)
@@ -48,7 +48,7 @@ const MainLayout: FC = ({ children }) => {
         console.log('rodou')
 
         await context.onPageRendered()
-      } catch (err) { }
+      } catch (err) {}
     })()
 
     return () => {
