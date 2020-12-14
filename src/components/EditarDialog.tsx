@@ -66,7 +66,7 @@ function EditarDialog(props: SimpleDialogProps) {
   }
 
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+    <Dialog open={open} aria-labelledby="form-dialog-title">
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle id="form-dialog-title">
           Editar registro de{' '}
@@ -74,7 +74,7 @@ function EditarDialog(props: SimpleDialogProps) {
         </DialogTitle>
         <DialogContent>
           <AutoComplete
-            options={labels}
+            options={labels.sort((a, b) => a < b ? -1 : 1)}
             defaultValue={registroSelecionado.descricao}
             getOptionLabel={(option) => option}
             freeSolo

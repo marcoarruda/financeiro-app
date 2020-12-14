@@ -74,7 +74,7 @@ function RegistrarDialog(props: SimpleDialogProps) {
   }
 
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+    <Dialog open={open} aria-labelledby="form-dialog-title">
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle id="form-dialog-title">
           Registrar {tipoRegistro === 'entrada' ? 'Entrada' : 'Saida'}
@@ -84,7 +84,7 @@ function RegistrarDialog(props: SimpleDialogProps) {
             render={(props) => (
               <AutoComplete
                 {...props}
-                options={labels}
+                options={labels.sort((a, b) => a < b ? -1 : 1)}
                 getOptionLabel={(option) => option}
                 freeSolo
                 renderInput={(params) => (
