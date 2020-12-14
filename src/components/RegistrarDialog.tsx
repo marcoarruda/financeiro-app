@@ -84,7 +84,7 @@ function RegistrarDialog(props: SimpleDialogProps) {
             render={(props) => (
               <AutoComplete
                 {...props}
-                options={labels.sort((a, b) => a < b ? -1 : 1)}
+                options={labels.sort((a, b) => (a < b ? -1 : 1))}
                 getOptionLabel={(option) => option}
                 freeSolo
                 renderInput={(params) => (

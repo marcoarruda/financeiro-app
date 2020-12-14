@@ -7,23 +7,25 @@ import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { AppContext, Registro } from '../contexts/AppContext'
-import { colors, Grid, Typography } from '@material-ui/core'
+import { Button, colors, Grid, Typography } from '@material-ui/core'
 import RemoveDialog from '../components/RemoveDialog'
 import EditarDialog from '../components/EditarDialog'
 import moment from 'moment'
 import numeral from 'numeral'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import RegistrarDialog from '../components/RegistrarDialog'
+import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      maxHeight: '68vh',
-      minHeight: '68vh',
+      maxHeight: '62vh',
+      minHeight: '62vh',
       overflowY: 'scroll',
       overflowX: 'hidden',
       [theme.breakpoints.up(1350)]: {
-        maxHeight: '78vh',
-        minHeight: '78vh',
+        maxHeight: '72vh',
+        minHeight: '72vh',
         overflowY: 'auto',
         overflowX: 'auto'
       }
@@ -45,12 +47,18 @@ const Lista: FC = () => {
   const [registroSelecionado, setRegistroSelecionado] = useState<Registro>(
     {} as Registro
   )
+  const [tipoRegistro, setTipoRegistro] = useState<'entrada' | 'saida'>(
+    'entrada'
+  )
+  const [registrarDialogOpen, setRegistrarDialogOpen] = useState(false)
+
   const context = useContext(AppContext)
   const classes = useStyles()
 
   const handleClose = () => {
     setRemoveDialogOpen(false)
     setEditarDialogOpen(false)
+    setRegistrarDialogOpen(false)
   }
 
   const handleDelete = (registroId: string | undefined) => {
@@ -63,8 +71,40 @@ const Lista: FC = () => {
     setEditarDialogOpen(true)
   }
 
+  const handleOpenRegistroDialog = (tipo: 'entrada' | 'saida') => {
+    setTipoRegistro(tipo)
+    setRegistrarDialogOpen(true)
+  }
+
   return (
     <Grid container>
+      <Grid
+        item
+        container
+        direction="row"
+        alignContent="space-between"
+        justify="space-around"
+        style={{
+          margin: 0,
+          padding: 0
+        }}>
+        <Grid item>
+          <Button
+            style={{ color: colors.green[500] }}
+            onClick={() => handleOpenRegistroDialog('entrada')}
+            startIcon={<ArrowDownward />}>
+            R$ {numeral(context.valorEntrada).format('0,0.00')}
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            style={{ color: colors.red.A700 }}
+            onClick={() => handleOpenRegistroDialog('saida')}
+            endIcon={<ArrowUpward />}>
+            R$ {numeral(context.valorSaida).format('0,0.00')}
+          </Button>
+        </Grid>
+      </Grid>
       <Grid item md={12} xs={12}>
         <List className={classes.root}>
           {context.loadingRegistros ? (
@@ -141,6 +181,11 @@ const Lista: FC = () => {
         open={editarDialogOpen}
         onClose={handleClose}
         registroSelecionado={registroSelecionado}
+      />
+      <RegistrarDialog
+        open={registrarDialogOpen}
+        onClose={handleClose}
+        tipoRegistro={tipoRegistro}
       />
     </Grid>
   )

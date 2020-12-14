@@ -21,6 +21,7 @@ import RegistrarDialog from '../components/RegistrarDialog'
 import RemoveDialog from '../components/RemoveDialog'
 import moment from 'moment'
 import numeral from 'numeral'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -107,7 +108,13 @@ const Relatorio: FC = () => {
           </ButtonGroup>
         </Grid>
         <List className={classes.root}>
-          {context.registros.length > 0 ? (
+          {context.loadingRegistros ? (
+            <Grid item container justify="center">
+              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                <CircularProgress />
+              </Typography>
+            </Grid>
+          ) : context.registros.length > 0 ? (
             <>
               {context.registros.map((registro) => {
                 if (
@@ -167,12 +174,12 @@ const Relatorio: FC = () => {
               })}
             </>
           ) : (
-              <Grid item container justify="center">
-                <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
-                  Nenhum registro encontrado
+            <Grid item container justify="center">
+              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                Nenhum registro encontrado
               </Typography>
-              </Grid>
-            )}
+            </Grid>
+          )}
         </List>
 
         <Grid item container>
@@ -198,10 +205,10 @@ const Relatorio: FC = () => {
                 Registrar Entrada
               </Button>
             ) : (
-                <Button variant="outlined" onClick={handleOpenRegistroDialog}>
-                  Registrar Saida
-                </Button>
-              )}
+              <Button variant="outlined" onClick={handleOpenRegistroDialog}>
+                Registrar Saida
+              </Button>
+            )}
           </Grid>
         </Grid>
       </Grid>
