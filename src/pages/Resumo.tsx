@@ -12,6 +12,7 @@ import { AppContext } from '../contexts/AppContext'
 import numeral from 'numeral'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const InButton = withStyles({
   root: {
@@ -54,7 +55,7 @@ const Resumo: FC = () => {
   const [tipoRegistro, setTipoRegistro] = useState<'entrada' | 'saida'>(
     'entrada'
   )
-  const context = useContext(AppContext)
+  const { loadingRegistros, valorEntrada, valorSaida } = useContext(AppContext)
 
   const handleClose = () => {
     setRegistrarDialogOpen(false)
@@ -74,12 +75,17 @@ const Resumo: FC = () => {
         container
         direction="column">
         <Grid justify="center" container item md={12}>
-          <Typography style={{ color: colors.green[500] }} variant="h6">
-            R$ {numeral(context.valorEntrada).format('0,0.00')}
-          </Typography>
+          {!loadingRegistros ? (
+            <Typography style={{ color: colors.green[500] }} variant="h6">
+              R$ {numeral(valorEntrada).format('0,0.00')}
+            </Typography>
+          ) : (
+            <CircularProgress size={14} />
+          )}
         </Grid>
         <Grid justify="center" container item md={12}>
           <InButton
+            disabled={loadingRegistros}
             onClick={() => {
               handleOpenRegistroDialog('entrada')
             }}
@@ -93,12 +99,17 @@ const Resumo: FC = () => {
           container
           item
           md={12}>
-          <Typography style={{ color: colors.red[500] }} variant="h6">
-            R$ {numeral(context.valorSaida).format('0,0.00')}
-          </Typography>
+          {!loadingRegistros ? (
+            <Typography style={{ color: colors.red[500] }} variant="h6">
+              R$ {numeral(valorSaida).format('0,0.00')}
+            </Typography>
+          ) : (
+            <CircularProgress size={14} />
+          )}
         </Grid>
         <Grid justify="center" container item md={12}>
           <OutButton
+            disabled={loadingRegistros}
             onClick={() => {
               handleOpenRegistroDialog('saida')
             }}

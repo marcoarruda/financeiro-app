@@ -14,6 +14,7 @@ import { PieChart, Pie, Cell } from 'recharts'
 import { AppContext, Registro } from '../contexts/AppContext'
 import numeral from 'numeral'
 import moment from 'moment'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const Grafico: FC = () => {
   const [tipo, setTipo] = useState<'entrada' | 'saida' | 'todos'>('todos')
@@ -171,7 +172,13 @@ const Grafico: FC = () => {
         </ButtonGroup>
       </Grid>
       <Grid container item justify="center">
-        {data.length > 0 ? (
+        {context.loadingRegistros ? (
+          <Grid item container justify="center">
+            <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+              <CircularProgress />
+            </Typography>
+          </Grid>
+        ) : data.length > 0 ? (
           <Grid item container justify="center">
             <PieChart
               width={220}
@@ -219,10 +226,10 @@ const Grafico: FC = () => {
             </Paper>
           </Grid>
         ) : (
-            <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
-              Nenhum registro encontrado
-            </Typography>
-          )}
+          <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+            Nenhum registro encontrado
+          </Typography>
+        )}
       </Grid>
     </Grid>
   )

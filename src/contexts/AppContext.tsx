@@ -42,6 +42,8 @@ type AppContextType = {
   onPageUnmount: () => void
   notification: string
   setNotification: (valor: string) => void
+  loadingRegistros: boolean
+  setLoadingRegistros: (valor: boolean) => void
 }
 
 export type Registro = {
@@ -59,6 +61,7 @@ export const AppContext = createContext<AppContextType>({} as AppContextType)
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null)
   const [registros, setRegistros] = useState<Registro[]>([])
+  const [loadingRegistros, setLoadingRegistros] = useState(false)
   const [data, setData] = useState<Date>(new Date())
   const [tipoData, setTipoData] = useState<unitOfTime.StartOf>('days')
   const [notification, setNotification] = useState('')
@@ -235,6 +238,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         addRegistro,
         editarRegistro,
         removeRegistro,
+        loadingRegistros,
+        setLoadingRegistros,
         valorEntrada,
         valorSaida,
         data,

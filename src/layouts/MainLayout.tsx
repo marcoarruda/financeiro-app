@@ -23,10 +23,39 @@ function Alert(props: AlertProps) {
 
 const MainLayout: FC = ({ children }) => {
   const classes = useStyles()
-  const context = useContext(AppContext)
+  const {
+    setRegistros,
+    setUser,
+    setNotification,
+    onPageRendered,
+    onPageUnmount,
+    notification,
+    setLoadingRegistros,
+    registros
+  } = useContext(AppContext)
 
   const onClose = () => {
-    context.setNotification('')
+    setNotification('')
+  }
+
+  const queryRegistros = async (filter: any, nextToken?: string) => {
+    let registrosQuery: any
+
+    if (nextToken) {
+      registrosQuery = await API.graphql(
+        graphqlOperation(listRegistros, { nextToken })
+      )
+    } else {
+      registrosQuery = await API.graphql(
+        graphqlOperation(listRegistros, { filter, limit: 1000 })
+      )
+    }
+
+    setRegistros([...registros, ...registrosQuery.data.listRegistros.items])
+
+    if (registrosQuery.data.listRegistros.nextToken) {
+      await queryRegistros(filter, registrosQuery.data.listRegistros.nextToken)
+    }
   }
 
   useEffect(() => {
@@ -37,22 +66,24 @@ const MainLayout: FC = ({ children }) => {
         const filter = {
           owner: { eq: newUser.username }
         }
-        const registros: any = await API.graphql(
-          graphqlOperation(listRegistros, { filter, limit: 500 })
-        )
 
-        context.setRegistros(registros.data.listRegistros.items)
+        try {
+          setLoadingRegistros(true)
+          if (registros.length === 0) {
+            await queryRegistros(filter)
+          }
+        } finally {
+          setLoadingRegistros(false)
+        }
 
-        context.setUser(newUser)
+        setUser(newUser)
 
-        console.log('rodou')
-
-        await context.onPageRendered()
+        await onPageRendered()
       } catch (err) {}
     })()
 
     return () => {
-      context.onPageUnmount()
+      onPageUnmount()
     }
   }, [])
 
@@ -68,10 +99,10 @@ const MainLayout: FC = ({ children }) => {
       </Grid>
 
       <Snackbar
-        open={context.notification !== ''}
+        open={notification !== ''}
         onClose={onClose}
         autoHideDuration={3000}>
-        <Alert severity="info">{context.notification}</Alert>
+        <Alert severity="info">{notification}</Alert>
       </Snackbar>
 
       {/* Footer */}

@@ -8,7 +8,6 @@ import Drawer from './Drawer'
 import { AppContext } from '../contexts/AppContext'
 import { Link, useHistory } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
-import { colors } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,9 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       top: 0,
       zIndex: 100
-    },
-    appBar: {
-      backgroundColor: colors.blue[800]
     },
     menuButton: {
       marginRight: theme.spacing(2)
@@ -47,7 +43,7 @@ const Header: FC = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appBar} position="static">
+      <AppBar position="static">
         <Toolbar>
           <Drawer />
           {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -66,10 +62,10 @@ const Header: FC = () => {
               Sair
             </Button>
           ) : (
-              <Button to="/login" component={Link} color="inherit">
-                Entrar
-              </Button>
-            )}
+            <Button to="/login" component={Link} color="inherit">
+              Entrar
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>

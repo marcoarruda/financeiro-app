@@ -76,8 +76,8 @@ const Data: FC = () => {
     context.tipoData === 'days'
       ? context.setTipoData('month')
       : context.tipoData === 'month'
-        ? context.setTipoData('year')
-        : context.setTipoData('days')
+      ? context.setTipoData('year')
+      : context.setTipoData('days')
   }
 
   return (
@@ -93,7 +93,7 @@ const Data: FC = () => {
         alignContent="center"
         justify="center">
         <Grid item container xs={1} sm={1} md={1} justify="center">
-          <IconButton onClick={diminuiData}>
+          <IconButton onClick={diminuiData} disabled={context.loadingRegistros}>
             <ArrowBack />
           </IconButton>
         </Grid>
@@ -108,6 +108,7 @@ const Data: FC = () => {
             alignContent="center">
             <FormControl className={classes.formControl}>
               <Button
+                disabled={context.loadingRegistros}
                 classes={{ root: classes.root, label: classes.label }}
                 variant="contained"
                 color="primary"
@@ -116,8 +117,8 @@ const Data: FC = () => {
                 {context.tipoData === 'days'
                   ? 'Dia'
                   : context.tipoData === 'month'
-                    ? 'Mês'
-                    : 'Ano'}
+                  ? 'Mês'
+                  : 'Ano'}
               </Button>
             </FormControl>
           </Grid>
@@ -130,21 +131,22 @@ const Data: FC = () => {
             justify="center"
             alignContent="center">
             <DatePicker
+              disabled={context.loadingRegistros}
               style={{ maxWidth: '100px', marginLeft: '1rem' }}
               fullWidth={false}
               views={
                 context.tipoData === 'days'
                   ? ['date', 'month', 'year']
                   : context.tipoData === 'month'
-                    ? ['month', 'year']
-                    : ['year']
+                  ? ['month', 'year']
+                  : ['year']
               }
               format={
                 context.tipoData === 'days'
                   ? 'DD/MM/YYYY'
                   : context.tipoData === 'month'
-                    ? 'MM/YYYY'
-                    : 'YYYY'
+                  ? 'MM/YYYY'
+                  : 'YYYY'
               }
               value={moment(context.data)}
               onChange={(data) => {
@@ -154,7 +156,7 @@ const Data: FC = () => {
           </Grid>
         </Grid>
         <Grid item container xs={1} sm={1} md={1} justify="center">
-          <IconButton onClick={aumentaData}>
+          <IconButton onClick={aumentaData} disabled={context.loadingRegistros}>
             <ArrowForward />
           </IconButton>
         </Grid>

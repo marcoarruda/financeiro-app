@@ -6,13 +6,13 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
-import CreateIcon from '@material-ui/icons/Create'
 import { AppContext, Registro } from '../contexts/AppContext'
 import { colors, Grid, Typography } from '@material-ui/core'
 import RemoveDialog from '../components/RemoveDialog'
 import EditarDialog from '../components/EditarDialog'
 import moment from 'moment'
 import numeral from 'numeral'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,7 +67,13 @@ const Lista: FC = () => {
     <Grid container>
       <Grid item md={12} xs={12}>
         <List className={classes.root}>
-          {context.registros.length > 0 ? (
+          {context.loadingRegistros ? (
+            <Grid item container justify="center">
+              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                <CircularProgress />
+              </Typography>
+            </Grid>
+          ) : context.registros.length > 0 ? (
             <>
               {context.registros.map((registro) => {
                 if (
