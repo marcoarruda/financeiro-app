@@ -19,8 +19,8 @@ import { ArrowDownward, ArrowUpward } from '@material-ui/icons'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      maxHeight: '62vh',
-      minHeight: '62vh',
+      maxHeight: '56vh',
+      minHeight: '56vh',
       overflowY: 'scroll',
       overflowX: 'hidden',
       [theme.breakpoints.up(1350)]: {
@@ -30,9 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
         overflowX: 'auto'
       },
       [theme.breakpoints.down(330)]: {
-        maxHeight: '57vh',
-        minHeight: '57vh',
-        overflowY: 'auto',
+        maxHeight: '55vh',
+        minHeight: '55vh',
+        overflowY: 'scroll',
         overflowX: 'auto'
       }
     },

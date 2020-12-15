@@ -27,6 +27,11 @@ function RegistrarDialog(props: SimpleDialogProps) {
   const [loading, setLoading] = useState(false)
   const [valor, setValor] = useState(0)
   const { addRegistro, registros, setNotification } = useContext(AppContext)
+  const { handleSubmit, control, getValues } = useForm({
+    defaultValues: {
+      descricao: ''
+    }
+  })
 
   useEffect(() => {
     const newLabels: string[] = []
@@ -39,8 +44,12 @@ function RegistrarDialog(props: SimpleDialogProps) {
       }
     }
 
+    // const labels = newLabels.filter((label) =>
+    //   label.includes(getValues().descricao)
+    // )
+
     setLabels(newLabels)
-  }, [registros, tipoRegistro])
+  }, [registros, tipoRegistro, getValues().descricao])
 
   const currencyConfig = {
     locale: 'pt-BR',
@@ -55,12 +64,6 @@ function RegistrarDialog(props: SimpleDialogProps) {
       }
     }
   }
-
-  const { handleSubmit, control } = useForm({
-    defaultValues: {
-      descricao: ''
-    }
-  })
 
   const handleChangeValor = (
     event: any,
