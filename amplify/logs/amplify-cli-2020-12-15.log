@@ -1,0 +1,5 @@
+2020-12-15T13:38:14.166Z|info : amplify publish core  
+2020-12-15T13:38:19.401Z|info : amplify-provider-awscloudformation.zip-util.downloadZip.s3.getFile([{"Key":"[***]rent-[***]ud-[***]d.zip"},null])
+2020-12-15T13:38:19.404Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]rent-[***]ud-[***]d.zip","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])
+2020-12-15T13:38:20.617Z|info : amplify-provider-awscloudformation.initialize-env.run.cfn.updateamplifyMetaFileWithStackOutputs([{"StackName":"[***]ify-[***]iroapp-[***]od-[***]332"}])
+2020-12-15T13:38:25.368Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]ify-[***]json","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])

@@ -1,22 +1,17 @@
-import {
-  DialogActions,
-  DialogContent,
-  InputAdornment,
-  TextField
-} from '@material-ui/core'
+import { DialogActions, DialogContent, TextField } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AppContext, Registro } from '../contexts/AppContext'
-import NumberFormatCustom from './NumberFormatCustom'
 import AutoComplete from '@material-ui/lab/Autocomplete'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import MomentUtils from '@date-io/moment'
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import moment from 'moment'
 import 'moment/locale/pt-br'
+import IntlCurrencyInput from 'react-intl-currency-input'
 
 moment.locale('pt-br')
 
@@ -28,7 +23,6 @@ type SimpleDialogProps = {
 
 type FormData = {
   descricao: string
-  valor: number
   data: Date
 }
 
@@ -38,6 +32,21 @@ function EditarDialog(props: SimpleDialogProps) {
   const [labels, setLabels] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [dataRegistro, setDataRegistro] = useState<Date>(new Date())
+  const [valorRegistro, setValorRegistro] = useState(0)
+
+  const currencyConfig = {
+    locale: 'pt-BR',
+    formats: {
+      number: {
+        BRL: {
+          style: 'currency',
+          currency: 'BRL',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     const newLabels: string[] = []
@@ -50,13 +59,22 @@ function EditarDialog(props: SimpleDialogProps) {
     }
 
     setDataRegistro(registroSelecionado.data)
+    setValorRegistro(registroSelecionado.valor)
 
     setLabels(newLabels)
   }, [registros, registroSelecionado])
 
   const { register, handleSubmit } = useForm()
 
-  const onSubmit = async ({ valor, descricao }: FormData) => {
+  const handleChangeValor = (
+    event: any,
+    value: number,
+    maskedValue: string
+  ) => {
+    setValorRegistro(value)
+  }
+
+  const onSubmit = async ({ descricao }: FormData) => {
     try {
       setLoading(true)
       const registro = {
@@ -64,7 +82,7 @@ function EditarDialog(props: SimpleDialogProps) {
         tipo: registroSelecionado.tipo,
         data: dataRegistro,
         descricao,
-        valor
+        valor: valorRegistro
       }
       await editarRegistro(registro)
       onClose()
@@ -100,27 +118,17 @@ function EditarDialog(props: SimpleDialogProps) {
                 />
               )}
             />
-            <TextField
-              style={{ marginTop: '10px' }}
-              margin="dense"
-              name="valor"
-              id="valor"
+            <IntlCurrencyInput
+              currency="BRL"
+              config={currencyConfig}
+              onChange={handleChangeValor}
+              defaultValue={valorRegistro}
+              component={TextField as ReactNode}
               label="Valor"
-              type="string"
-              defaultValue={registroSelecionado.valor}
-              inputRef={register({
-                setValueAs: (value) => {
-                  return Number(value.replaceAll('.', '').replaceAll(',', '.'))
-                },
-                required: true
-              })}
-              InputProps={{
-                inputComponent: NumberFormatCustom as any,
-                startAdornment: (
-                  <InputAdornment position="start">R$</InputAdornment>
-                )
+              inputProps={{
+                inputMode: 'numeric'
               }}
-              fullWidth
+              style={{ marginTop: '10px' }}
             />
             <DatePicker
               style={{ marginTop: '10px' }}

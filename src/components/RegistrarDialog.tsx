@@ -2,12 +2,12 @@ import { DialogActions, DialogContent, TextField } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
 import AutoComplete from '@material-ui/lab/Autocomplete'
-import NumberFormat from 'react-number-format'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import IntlCurrencyInput from 'react-intl-currency-input'
 
 type SimpleDialogProps = {
   open: boolean
@@ -25,6 +25,7 @@ function RegistrarDialog(props: SimpleDialogProps) {
 
   const [labels, setLabels] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
+  const [valor, setValor] = useState(0)
   const { addRegistro, registros, setNotification } = useContext(AppContext)
 
   useEffect(() => {
@@ -41,23 +42,41 @@ function RegistrarDialog(props: SimpleDialogProps) {
     setLabels(newLabels)
   }, [registros, tipoRegistro])
 
+  const currencyConfig = {
+    locale: 'pt-BR',
+    formats: {
+      number: {
+        BRL: {
+          style: 'currency',
+          currency: 'BRL',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      }
+    }
+  }
+
   const { handleSubmit, control } = useForm({
     defaultValues: {
-      descricao: '',
-      valor: ' '
+      descricao: ''
     }
   })
 
-  const onSubmit = async ({ valor, descricao }: FormData) => {
-    const valorNumber = Number(
-      valor?.split(' ')[1].split('.').join('').replace(',', '.')
-    )
+  const handleChangeValor = (
+    event: any,
+    value: number,
+    maskedValue: string
+  ) => {
+    setValor(value)
+  }
+
+  const onSubmit = async ({ descricao }: FormData) => {
     if (descricao.trim().length === 0) {
       setNotification('Descrição não pode ser vazia')
       return
     }
 
-    if (valorNumber <= 0) {
+    if (valor <= 0) {
       setNotification('Valor deve ser maior que 0')
       return
     }
@@ -65,7 +84,7 @@ function RegistrarDialog(props: SimpleDialogProps) {
     const registro = {
       tipo: tipoRegistro,
       descricao: descricao.trim(),
-      valor: valorNumber
+      valor
     }
 
     console.log({ valor, descricao })
@@ -76,6 +95,7 @@ function RegistrarDialog(props: SimpleDialogProps) {
       onClose()
     } finally {
       setLoading(false)
+      setValor(0)
     }
   }
 
@@ -103,29 +123,25 @@ function RegistrarDialog(props: SimpleDialogProps) {
             control={control}
             name="descricao"
           />
-          <Controller
-            as={
-              <NumberFormat
-                customInput={TextField}
-                thousandSeparator="."
-                decimalSeparator=","
-                decimalScale={2}
-                prefix="R$ "
-                fixedDecimalScale
-                defaultValue=" "
-              />
-            }
+          <IntlCurrencyInput
+            style={{ marginTop: '10px' }}
+            currency="BRL"
+            config={currencyConfig}
+            onChange={handleChangeValor}
+            component={TextField as ReactNode}
+            label="Valor"
+            defaultValue={valor}
             inputProps={{
               inputMode: 'numeric'
             }}
-            label="Valor"
-            control={control}
-            name="valor"
           />
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={onClose}
+            onClick={() => {
+              onClose()
+              setValor(0)
+            }}
             color="primary"
             style={{ marginRight: '10px' }}>
             Cancelar

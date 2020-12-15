@@ -7,7 +7,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import EditarDialog from '../components/EditarDialog'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
-import CreateIcon from '@material-ui/icons/Create'
 import { AppContext, Registro } from '../contexts/AppContext'
 import {
   Button,

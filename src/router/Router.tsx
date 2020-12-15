@@ -30,7 +30,7 @@ const ProtectedRoute = ({
   const context = useContext(AppContext)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       let user = null
 
       try {
