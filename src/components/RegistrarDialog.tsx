@@ -25,7 +25,7 @@ function RegistrarDialog(props: SimpleDialogProps) {
 
   const [labels, setLabels] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
-  const { addRegistro, registros } = useContext(AppContext)
+  const { addRegistro, registros, setNotification } = useContext(AppContext)
 
   useEffect(() => {
     const newLabels: string[] = []
@@ -53,6 +53,12 @@ function RegistrarDialog(props: SimpleDialogProps) {
       valor?.split(' ')[1].split('.').join('').replace(',', '.')
     )
     if (descricao.trim().length === 0) {
+      setNotification('Descrição não pode ser vazia')
+      return
+    }
+
+    if (valorNumber <= 0) {
+      setNotification('Valor deve ser maior que 0')
       return
     }
 

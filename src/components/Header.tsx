@@ -34,7 +34,7 @@ const Header: FC = () => {
 
   const onLogout = async () => {
     await Auth.signOut()
-
+    context.setRegistros([])
     context.setUser(null)
     localStorage.removeItem('teste.login')
 
