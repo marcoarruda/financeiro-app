@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: '12px',
       border: 0,
       color: 'white',
-      height: 48,
+      height: 36,
       width: 100,
       padding: '0',
       boxShadow: '0 0 6px rgba(0, 0, 0, .3)'

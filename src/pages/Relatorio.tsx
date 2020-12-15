@@ -129,8 +129,9 @@ const Relatorio: FC = () => {
                       <ListItem
                         onClick={() => {
                           setRegistroSelecionado(registro)
+                          handleEdit(registro)
                         }}
-                        selected={registroSelecionado?.id === registro.id}
+                        // selected={registroSelecionado?.id === registro.id}
                         role={undefined}
                         button>
                         <ListItemText
@@ -149,13 +150,6 @@ const Relatorio: FC = () => {
                           - {registro.descricao}
                         </ListItemText>
                         <ListItemSecondaryAction>
-                          <IconButton
-                            onClick={() => {
-                              handleEdit(registro)
-                            }}
-                            edge="end">
-                            <CreateIcon />
-                          </IconButton>
                           <IconButton
                             onClick={() => {
                               handleDelete(registro.id)
@@ -187,11 +181,11 @@ const Relatorio: FC = () => {
             item
             container
             justify="center"
-            style={{ marginBottom: '0.3rem' }}>
+            style={{ marginBottom: '0.3rem', marginTop: '0.3rem' }}>
             <Typography variant="body1">
               {
                 <strong>
-                  R${' '}
+                  TOTAL: R${' '}
                   {tipo === 'entrada'
                     ? numeral(context.valorEntrada).format('0,0.00')
                     : '-' + numeral(context.valorSaida).format('0,0.00')}

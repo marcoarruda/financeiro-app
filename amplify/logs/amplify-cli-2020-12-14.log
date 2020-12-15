@@ -59,3 +59,8 @@
 2020-12-14T14:45:46.254Z|info : amplify-provider-awscloudformation.aws-s3.uploadFile.s3.putObject([{"Key":"[***]ify-[***]json","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])
 2020-12-14T14:45:47.141Z|info : amplify-provider-awscloudformation.amplify-service-manager.s3.uploadFile([{"Key":"[***]end-[***].json"}])
 2020-12-14T14:45:47.141Z|info : amplify-provider-awscloudformation.aws-s3.uploadFile.s3.putObject([{"Key":"[***]end-[***].json","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])
+2020-12-14T19:04:30.568Z|info : amplify publish core  
+2020-12-14T19:04:35.675Z|info : amplify-provider-awscloudformation.zip-util.downloadZip.s3.getFile([{"Key":"[***]rent-[***]ud-[***]d.zip"},null])
+2020-12-14T19:04:35.677Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]rent-[***]ud-[***]d.zip","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])
+2020-12-14T19:04:36.777Z|info : amplify-provider-awscloudformation.initialize-env.run.cfn.updateamplifyMetaFileWithStackOutputs([{"StackName":"[***]ify-[***]iroapp-[***]od-[***]332"}])
+2020-12-14T19:04:41.391Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]ify-[***]json","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])

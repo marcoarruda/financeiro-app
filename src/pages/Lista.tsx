@@ -28,6 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
         minHeight: '72vh',
         overflowY: 'auto',
         overflowX: 'auto'
+      },
+      [theme.breakpoints.down(330)]: {
+        maxHeight: '57vh',
+        minHeight: '57vh',
+        overflowY: 'auto',
+        overflowX: 'auto'
       }
     },
     inText: {
@@ -77,7 +83,91 @@ const Lista: FC = () => {
   }
 
   return (
-    <Grid container>
+    <>
+      <Grid container>
+        <Grid item md={12} xs={12}>
+          <List className={classes.root}>
+            {context.loadingRegistros ? (
+              <Grid item container justify="center">
+                <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                  <CircularProgress />
+                </Typography>
+              </Grid>
+            ) : context.registros.length > 0 ? (
+              <>
+                {context.registros.map((registro) => {
+                  if (
+                    moment(registro.data).isSame(
+                      moment(context.data),
+                      context.tipoData
+                    )
+                  ) {
+                    return (
+                      <Fragment key={registro.id}>
+                        <ListItem
+                          button
+                          onClick={() => {
+                            handleEdit(registro)
+                          }}>
+                          <ListItemText
+                            className={
+                              registro.tipo === 'entrada'
+                                ? classes.inText
+                                : classes.outText
+                            }
+                            id={`checkbox-list-label-${registro.id}`}>
+                            <Typography variant="subtitle2">
+                              <strong>
+                                R${' '}
+                                {registro.tipo === 'entrada'
+                                  ? numeral(registro.valor).format('0,0.00')
+                                  : numeral(-registro.valor).format('0,0.00')}
+                              </strong>{' '}
+                              - {registro.descricao}
+                            </Typography>
+                          </ListItemText>
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              onClick={() => {
+                                handleDelete(registro.id)
+                              }}
+                              edge="end">
+                              <DeleteIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      </Fragment>
+                    )
+                  } else {
+                    return null
+                  }
+                })}
+              </>
+            ) : (
+              <Grid item container justify="center">
+                <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
+                  Nenhum registro encontrado
+                </Typography>
+              </Grid>
+            )}
+          </List>
+        </Grid>
+        <RemoveDialog
+          open={removeDialogOpen}
+          onClose={handleClose}
+          registroId={registroId}
+        />
+        <EditarDialog
+          open={editarDialogOpen}
+          onClose={handleClose}
+          registroSelecionado={registroSelecionado}
+        />
+        <RegistrarDialog
+          open={registrarDialogOpen}
+          onClose={handleClose}
+          tipoRegistro={tipoRegistro}
+        />
+      </Grid>
       <Grid
         item
         container
@@ -105,89 +195,7 @@ const Lista: FC = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item md={12} xs={12}>
-        <List className={classes.root}>
-          {context.loadingRegistros ? (
-            <Grid item container justify="center">
-              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
-                <CircularProgress />
-              </Typography>
-            </Grid>
-          ) : context.registros.length > 0 ? (
-            <>
-              {context.registros.map((registro) => {
-                if (
-                  moment(registro.data).isSame(
-                    moment(context.data),
-                    context.tipoData
-                  )
-                ) {
-                  return (
-                    <Fragment key={registro.id}>
-                      <ListItem
-                        button
-                        onClick={() => {
-                          handleEdit(registro)
-                        }}>
-                        <ListItemText
-                          className={
-                            registro.tipo === 'entrada'
-                              ? classes.inText
-                              : classes.outText
-                          }
-                          id={`checkbox-list-label-${registro.id}`}>
-                          <Typography variant="subtitle2">
-                            <strong>
-                              R${' '}
-                              {registro.tipo === 'entrada'
-                                ? numeral(registro.valor).format('0,0.00')
-                                : numeral(-registro.valor).format('0,0.00')}
-                            </strong>{' '}
-                            - {registro.descricao}
-                          </Typography>
-                        </ListItemText>
-                        <ListItemSecondaryAction>
-                          <IconButton
-                            onClick={() => {
-                              handleDelete(registro.id)
-                            }}
-                            edge="end">
-                            <DeleteIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    </Fragment>
-                  )
-                } else {
-                  return null
-                }
-              })}
-            </>
-          ) : (
-            <Grid item container justify="center">
-              <Typography variant="subtitle1" style={{ marginTop: '10rem' }}>
-                Nenhum registro encontrado
-              </Typography>
-            </Grid>
-          )}
-        </List>
-      </Grid>
-      <RemoveDialog
-        open={removeDialogOpen}
-        onClose={handleClose}
-        registroId={registroId}
-      />
-      <EditarDialog
-        open={editarDialogOpen}
-        onClose={handleClose}
-        registroSelecionado={registroSelecionado}
-      />
-      <RegistrarDialog
-        open={registrarDialogOpen}
-        onClose={handleClose}
-        tipoRegistro={tipoRegistro}
-      />
-    </Grid>
+    </>
   )
 }
 
