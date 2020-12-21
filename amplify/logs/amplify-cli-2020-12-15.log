@@ -8,3 +8,8 @@
 2020-12-15T15:15:02.058Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]rent-[***]ud-[***]d.zip","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])
 2020-12-15T15:15:03.237Z|info : amplify-provider-awscloudformation.initialize-env.run.cfn.updateamplifyMetaFileWithStackOutputs([{"StackName":"[***]ify-[***]iroapp-[***]od-[***]332"}])
 2020-12-15T15:15:08.097Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]ify-[***]json","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])
+2020-12-15T15:32:02.409Z|info : amplify publish core  
+2020-12-15T15:32:06.477Z|info : amplify-provider-awscloudformation.zip-util.downloadZip.s3.getFile([{"Key":"[***]rent-[***]ud-[***]d.zip"},null])
+2020-12-15T15:32:06.479Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]rent-[***]ud-[***]d.zip","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])
+2020-12-15T15:32:08.025Z|info : amplify-provider-awscloudformation.initialize-env.run.cfn.updateamplifyMetaFileWithStackOutputs([{"StackName":"[***]ify-[***]iroapp-[***]od-[***]332"}])
+2020-12-15T15:32:12.747Z|info : amplify-provider-awscloudformation.aws-s3.s3.getFile([{"Key":"[***]ify-[***]json","Bucket":"[***]ify-[***]iroapp-[***]od-[***]332-[***]ment"}])

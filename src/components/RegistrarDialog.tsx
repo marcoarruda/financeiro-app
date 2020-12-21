@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, ControllerRenderProps } from 'react-hook-form'
 import { AppContext } from '../contexts/AppContext'
 import AutoComplete from '@material-ui/lab/Autocomplete'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -24,10 +24,11 @@ function RegistrarDialog(props: SimpleDialogProps) {
   const { onClose, open, tipoRegistro } = props
 
   const [labels, setLabels] = useState<string[]>([])
+  const [defaultLabels, setDefaultLabels] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [valor, setValor] = useState(0)
   const { addRegistro, registros, setNotification } = useContext(AppContext)
-  const { handleSubmit, control, getValues } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: {
       descricao: ''
     }
@@ -44,12 +45,9 @@ function RegistrarDialog(props: SimpleDialogProps) {
       }
     }
 
-    // const labels = newLabels.filter((label) =>
-    //   label.includes(getValues().descricao)
-    // )
-
     setLabels(newLabels)
-  }, [registros, tipoRegistro, getValues().descricao])
+    setDefaultLabels(newLabels)
+  }, [registros, tipoRegistro])
 
   const currencyConfig = {
     locale: 'pt-BR',
@@ -102,6 +100,23 @@ function RegistrarDialog(props: SimpleDialogProps) {
     }
   }
 
+  const changeFunction = (props: ControllerRenderProps) => (
+    _: any,
+    data: string
+  ) => {
+    if (!data || data === '') {
+      setLabels(defaultLabels)
+    } else {
+      const newLabels = defaultLabels.filter((label) =>
+        label.toLowerCase().includes(data?.toLowerCase())
+      )
+
+      setLabels(newLabels)
+    }
+
+    props.onChange(data)
+  }
+
   return (
     <Dialog open={open} aria-labelledby="form-dialog-title">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -119,8 +134,8 @@ function RegistrarDialog(props: SimpleDialogProps) {
                 renderInput={(params) => (
                   <TextField autoFocus {...params} label="Descrição" />
                 )}
-                onInputChange={(_, data) => props.onChange(data)}
-                onChange={(_, data) => props.onChange(data)}
+                onInputChange={changeFunction(props)}
+                onChange={changeFunction(props)}
               />
             )}
             control={control}

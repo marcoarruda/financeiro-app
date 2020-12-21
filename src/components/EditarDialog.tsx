@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, ControllerRenderProps } from 'react-hook-form'
 import { AppContext, Registro } from '../contexts/AppContext'
 import AutoComplete from '@material-ui/lab/Autocomplete'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -30,6 +30,7 @@ function EditarDialog(props: SimpleDialogProps) {
   const { onClose, open, registroSelecionado } = props
   const { editarRegistro, registros } = useContext(AppContext)
   const [labels, setLabels] = useState<string[]>([])
+  const [defaultLabels, setDefaultLabels] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [dataRegistro, setDataRegistro] = useState<Date>(new Date())
   const [valorRegistro, setValorRegistro] = useState(0)
@@ -62,9 +63,27 @@ function EditarDialog(props: SimpleDialogProps) {
     setValorRegistro(registroSelecionado.valor)
 
     setLabels(newLabels)
+    setDefaultLabels(newLabels)
   }, [registros, registroSelecionado])
 
   const { register, handleSubmit } = useForm()
+
+  const changeFunction = (props?: ControllerRenderProps) => (
+    _: any,
+    data: any
+  ) => {
+    if (!data || data === '') {
+      setLabels(defaultLabels)
+    } else {
+      const newLabels = defaultLabels.filter((label) =>
+        label.toLowerCase().includes(data?.toLowerCase())
+      )
+
+      setLabels(newLabels)
+    }
+
+    props?.onChange(data)
+  }
 
   const handleChangeValor = (
     event: any,
@@ -117,6 +136,8 @@ function EditarDialog(props: SimpleDialogProps) {
                   })}
                 />
               )}
+              onInputChange={changeFunction()}
+              onChange={changeFunction()}
             />
             <IntlCurrencyInput
               currency="BRL"
