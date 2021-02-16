@@ -38,24 +38,31 @@ const MainLayout: FC = ({ children }) => {
     setNotification('')
   }
 
-  const queryRegistros = async (filter: any, nextToken?: string) => {
-    let registrosQuery: any
+  const queryRegistros = async ({
+    params,
+    items = [],
+    callback = undefined
+  }: {
+    params: any
+    items?: any[]
+    callback?: any
+  }): Promise<any> => {
+    const { data }: any = await API.graphql(
+      graphqlOperation(listRegistros, params)
+    )
+    const key = Object.keys(data).find((k) => k.includes('list'))
+    const res = data[key as string] // res = { items: [], nextToken: '' }
 
-    if (nextToken) {
-      registrosQuery = await API.graphql(
-        graphqlOperation(listRegistros, { nextToken })
-      )
-    } else {
-      registrosQuery = await API.graphql(
-        graphqlOperation(listRegistros, { filter, limit: 1000 })
-      )
+    items.push(...res.items)
+
+    if (callback) {
+      callback(res.items)
     }
 
-    setRegistros([...registros, ...registrosQuery.data.listRegistros.items])
+    if (!res.nextToken) return items
 
-    if (registrosQuery.data.listRegistros.nextToken) {
-      await queryRegistros(filter, registrosQuery.data.listRegistros.nextToken)
-    }
+    params.nextToken = res.nextToken
+    return await queryRegistros({ params, items, callback })
   }
 
   useEffect(() => {
@@ -63,14 +70,17 @@ const MainLayout: FC = ({ children }) => {
       try {
         const newUser = await Auth.currentAuthenticatedUser()
 
-        const filter = {
-          owner: { eq: newUser.username }
+        const params = {
+          filter: {
+            owner: { eq: newUser.username }
+          },
+          limit: 1000
         }
-
         try {
           setLoadingRegistros(true)
           if (registros.length === 0) {
-            await queryRegistros(filter)
+            const registros = await queryRegistros({ params })
+            setRegistros(registros)
           }
         } finally {
           setLoadingRegistros(false)
